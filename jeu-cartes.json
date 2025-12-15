@@ -6,7 +6,7 @@
             "story": "CATASTROPHE ! Vous utilisez une éponge sale depuis <span class='danger'>PLUSIEURS JOURS</span> ! Cette éponge a tout nettoyé : le plan de travail, l'évier, les plaques... Elle est devenue un <span class='highlight'>nid à microbes</span> !",
             "effect": "La bactérie avance de 2 cases et VOUS reculez d'1 case !",
             "queenReaction": "PARFAIT ! <span class='danger'>MAGNIFIQUE</span> ! Une éponge humide contient jusqu'à <span class='highlight'>54 MILLIARDS</span> de bactéries par cm³ ! C'est un véritable laboratoire pour E. coli, Salmonella et mes amies Staphylococcus ! Vous me facilitez le travail ! 😈🦠",
-            "file": "/audio/cartes-incident/eponge-contaminee.mp3",
+            "file": "audio/cartes-incident/eponge-contaminee.mp3",
             "fact": "Les éponges de cuisine peuvent contenir plus de bactéries que le siège des toilettes ! L'OMS recommande de les désinfecter quotidiennement au micro-ondes (2 min) ou à l'eau bouillante, et de les remplacer CHAQUE SEMAINE !"
         },
         {
@@ -15,7 +15,7 @@
             "story": "ERREUR CRITIQUE ! Vous rincez mal le matériel après le lavage ! Il reste des <span class='danger'>traces de savon</span> ET des <span class='danger'>particules alimentaires</span>. Un cocktail explosif !",
             "effect": "Votre prochain passage sur une zone OMS ne compte pas !",
             "queenReaction": "OUI ! Les résidus de détergent créent une pellicule où mes bactéries adorent se cacher ! <span class='highlight'>Listeria</span> peut survivre PLUSIEURS JOURS dans ces conditions ! Sans parler des réactions chimiques toxiques... Vous êtes un allié précieux ! 👑🦠",
-            "file": "/audio/cartes-incident/rincage-bacle.mp3",
+            "file": "audio/cartes-incident/rincage-bacle.mp3",
             "fact": "Un rinçage incomplet laisse un biofilm invisible où les bactéries se multiplient 10 fois plus vite ! L'OMS exige un rinçage à l'eau courante pendant au moins 15 secondes pour éliminer tous les résidus."
         },
         {
@@ -23,7 +23,7 @@
             "title": "CHAÎNE DU FROID CASSÉE",
             "story": "DÉSASTRE TOTAL ! Vous laissez un produit sensible hors du frigo pendant <span class='danger'>TROP LONGTEMPS</span>... La température grimpe... <span class='danger'>15°C... 20°C... 25°C...</span> Vous êtes en pleine zone de danger !",
             "effect": "Retournez à la case neutre la plus proche derrière vous !",
-            "file": "/audio/cartes-incident/chaine-du-froid-cassee.mp3",
+            "file": "audio/cartes-incident/chaine-du-froid-cassee.mp3",
             "queenReaction": "EXTRAORDINAIRE ! Entre 5°C et 60°C, c'est MON TERRITOIRE ! <span class='danger'>Nous doublons notre population toutes les 20 minutes</span> ! En 2 heures, UNE bactérie devient <span class='highlight'>4 MILLIONS</span> ! Salmonella, E. coli, Campylobacter... toute la famille se réjouit ! 🦠💀",
             "fact": "La 'Zone de Danger' (5-60°C) est où les bactéries pathogènes se multiplient exponentiellement. La règle des 2 heures de l'OMS est absolue : au-delà, les toxines produites peuvent résister même à la cuisson !"
         },
@@ -33,7 +33,7 @@
             "story": "HORREUR ! Vous préparez une salade avec des légumes <span class='danger'>PAS LAVÉS</span> ! Ils viennent directement de leur emballage... couverts de <span class='highlight'>terre, pesticides et pathogènes</span> !",
             "effect": "Vous passez votre prochain tour !",
             "queenReaction": "JUBILATION TOTALE ! Les légumes crus sont couverts de <span class='highlight'>E. coli</span> provenant des engrais organiques ! Sans parler des parasites et des virus ! <span class='danger'>26% des intoxications</span> viennent des légumes mal lavés selon l'EFSA ! 🦠🥗",
-            "file": "/audio/cartes-incident/legumes-non-laves.mp3",
+            "file": "audio/cartes-incident/legumes-non-laves.mp3",
             "fact": "L'OMS recommande de laver TOUS les légumes sous l'eau courante pendant 30 secondes minimum, même ceux emballés 'prêts à l'emploi'."
         },
         {
@@ -42,7 +42,7 @@
             "story": "DANGER IMMINENT ! Votre viande hachée est <span class='danger'>ROSE À L'INTÉRIEUR</span> ! La surface est bien grillée mais le cœur n'a atteint que <span class='danger'>55°C</span>...",
             "effect": "La bactérie avance de 3 cases vers vous !",
             "queenReaction": "VICTOIRE ! À 55°C, E. coli O157:H7 SURVIT et prospère ! <span class='danger'>Cette souche a tué des enfants</span> en France ! 😈🔥",
-            "file": "/audio/cartes-incident/cuisson-insuffisante.mp3",
+            "file": "audio/cartes-incident/cuisson-insuffisante.mp3",
             "fact": "La viande hachée DOIT atteindre 70°C à cœur (réglementation UE)."
         }
     ],
@@ -53,7 +53,7 @@
             "story": "BRAVO ! Vous organisez votre poste de travail selon les normes <span class='highlight'>HACCP</span> !",
             "effect": "Ignorez le prochain événement négatif !",
             "queenReaction": "IMPOSSIBLE ! Vous appliquez les 7 principes HACCP qui réduisent de <span class='danger'>90% les contaminations</span> ! 😤",
-            "file": "/audio/cartes-securite/organisation-parfaite.mp3",
+            "file": "audio/cartes-securite/organisation-parfaite.mp3",
             "fact": "Le système HACCP est reconnu mondialement."
         },
         {
@@ -62,7 +62,7 @@
             "story": "EXCELLENT ! Nettoyage + rinçage + désinfection : protocole parfait !",
             "effect": "Relancez le dé !",
             "queenReaction": "NON ! Vous éliminez <span class='danger'>99,99% des pathogènes</span> ! 😡",
-            "file": "/audio/cartes-securite/desinfection-complete.mp3",
+            "file": "audio/cartes-securite/desinfection-complete.mp3",
             "fact": "Seul le protocole complet est efficace."
         },
         {
@@ -71,7 +71,7 @@
             "story": "PARFAIT ! Frigo à 4°C, produits rangés immédiatement.",
             "effect": "Immunité pendant 2 tours !",
             "queenReaction": "À 4°C ma multiplication est 10x plus lente ! 🥶",
-            "file": "/audio/cartes-securite/maitrise-du-froid.mp3",
+            "file": "audio/cartes-securite/maitrise-du-froid.mp3",
             "fact": "La chaîne du froid est le point critique n°1."
         },
         {
@@ -80,7 +80,7 @@
             "story": "BIEN JOUÉ ! Lavage des mains pendant 30 secondes avec savon et séchage adapté.",
             "effect": "Annulez un effet négatif en cours !",
             "queenReaction": "QUOI ?! Vous éliminez mes alliées invisibles avant même qu'elles n'agissent ! 🤬",
-            "file": "/audio/cartes-securite/hygiene-des-mains.mp3",
+            "file": "audio/cartes-securite/hygiene-des-mains.mp3",
             "fact": "Le lavage des mains réduit jusqu'à 80% des contaminations croisées."
         },
         {
@@ -89,7 +89,7 @@
             "story": "PARFAIT ! Tout est fait dans le bon ordre.",
             "effect": "Choisissez un joueur : il passe son prochain tour.",
             "queenReaction": "TROP LENT ! Je le rattrape ! 😏",
-            "file": "/audio/cartes-securite/procédure-optimisée.mp3",
+            "file": "audio/cartes-securite/procédure-optimisée.mp3",
             "fact": "Une bonne organisation réduit le stress et les erreurs."
         }
     ],
@@ -100,7 +100,7 @@
             "story": "Briefing surprise ! Une question pour tout le monde...",
             "effect": "Le seul qui se trompe recule de 2 cases !",
             "queenReaction": "La communication réduit 70% des erreurs ! 😈",
-            "file": "/audio/cartes-surprise/briefing-du-chef.mp3",
+            "file": "audio/cartes-surprise/briefing-du-chef.mp3",
             "fact": "Le briefing quotidien est recommandé par l'OMS."
         },
         {
@@ -109,7 +109,7 @@
             "story": "La zone clé la plus proche du joueur est placée en quarantaine.",
             "effect": "Zone bloquée pendant 2 tours pour tout le monde.",
             "queenReaction": "Isolement = contrôle 😈",
-            "file": "/audio/cartes-surprise/quarantaine.mp3",
+            "file": "audio/cartes-surprise/quarantaine.mp3",
             "fact": "Limiter les déplacements réduit la propagation."
         },
         {
@@ -118,7 +118,7 @@
             "story": "Suspicion de contamination.",
             "effect": "Si le joueur est à 3 cases d'un autre joueur → retour au centre.",
             "queenReaction": "La proximité est dangereuse 😏",
-            "file": "/audio/cartes-surprise/cas-contact.mp3",
+            "file": "audio/cartes-surprise/cas-contact.mp3",
             "fact": "La transmission croisée augmente avec la proximité."
         },
         {
@@ -127,7 +127,7 @@
             "story": "Microbe ou fausse alerte ?",
             "effect": "Lancer le dé, si Pair → rejouer ; impair → la bactérie avance a une case de vous.",
             "queenReaction": "Indice ou piège ? 🦠",
-            "file": "/audio/cartes-surprise/trace-suspecte.mp3",
+            "file": "audio/cartes-surprise/trace-suspecte.mp3",
             "fact": "Les contaminations indirectes sont fréquentes."
         },
         {
@@ -136,7 +136,7 @@
             "story": "Règle modifiée en urgence.",
             "effect": "Tous les joueurs permutent avec leur voisin de gauche.",
             "queenReaction": "Voyons qui s'adapte 😼",
-            "file": "/audio/cartes-surprise/nouvelle-règle-haccp.mp3",
+            "file": "audio/cartes-surprise/nouvelle-règle-haccp.mp3",
             "fact": "Le plan HACCP doit rester adaptable."
         },
         {
@@ -145,7 +145,7 @@
             "story": "Colis inattendu.",
             "effect": "Tous avancent d'1 case.",
             "queenReaction": "Inspection obligatoire 📦",
-            "file": "/audio/cartes-surprise/livraison-surprise.mp3",
+            "file": "audio/cartes-surprise/livraison-surprise.mp3",
             "fact": "Toute livraison doit être contrôlée."
         },
         {
@@ -154,7 +154,7 @@
             "story": "Un appareil tombe en panne.",
             "effect": "Reculez de 2 cases.",
             "queenReaction": "Le chaos me nourrit 💥",
-            "file": "/audio/cartes-surprise/incident-materiel.mp3",
+            "file": "audio/cartes-surprise/incident-materiel.mp3",
             "fact": "Les pannes sont des risques critiques."
         }
     ],
