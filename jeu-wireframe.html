@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Reine des Micro-organismes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Variables CSS personnalisées */
+        :root {
+            --pillar-1-color: #80D0E9;
+            --pillar-2-color: #BBBC4C;
+            --pillar-3-color: #F96E18;
+            --pillar-4-color: #C1CFF4;
+            --pillar-5-color: #FF453E;
+            --bg-color: #7373F3;
+            --primary-color: #1C2467;
+            --quiz-bg-color: #E85D4A;
+            --quiz-border-color: #E85D4A;
+            --event-security-bg: #FF653E;
+            --event-incident-bg: #21AA74;
+            --event-surprise-bg: #7373F3;
+        }
+
+        /* Animations */
+        @keyframes diceRoll {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            25% {
+                transform: rotate(90deg) scale(1.2);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1);
+            }
+
+            75% {
+                transform: rotate(270deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .dice-display.rolling .dice-icon {
+            animation: diceRoll 0.5s ease-in-out;
+        }
+
+        .dice-3d {
+            animation: diceRoll 1s ease-in-out;
+        }
+
+        /* Background image (impossible en Tailwind) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("background-uxd2.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Classes dynamiques pour JavaScript */
+        .active {
+            display: block !important;
+        }
+
+        #diceAnimation.active {
+            display: flex !important;
+        }
+
+        #pillarsSelection.active {
+            display: grid !important;
+        }
+
+        #playerSetup.active {
+            display: flex !important;
+        }
+
+        /* Progress box colors (appliquées dynamiquement) */
+        .pillar-1 {
+            background-color: var(--pillar-1-color) !important;
+        }
+
+        .pillar-2 {
+            background-color: var(--pillar-2-color) !important;
+        }
+
+        .pillar-3 {
+            background-color: var(--pillar-3-color) !important;
+        }
+
+        .pillar-4 {
+            background-color: var(--pillar-4-color) !important;
+        }
+
+        .pillar-5 {
+            background-color: var(--pillar-5-color) !important;
+        }
+
+        /* Event modal backgrounds (appliquées dynamiquement) */
+        #eventScreen.security #eventContainer {
+            background-color: var(--event-security-bg) !important;
+        }
+
+        #eventScreen.incident #eventContainer {
+            background-color: var(--event-incident-bg) !important;
+        }
+
+        #eventScreen.surprise #eventContainer {
+            background-color: var(--event-surprise-bg) !important;
+        }
+
+        /* Answer states (appliquées dynamiquement par JS) */
+        .answer-option {
+            background: #FFFFFF;
+            border: 3px solid #D1D5DB;
+            padding: 16px 20px;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .answer-option:hover {
+            background: #F9FAFB;
+            border-color: #9CA3AF;
+        }
+
+        .answer-option.correct {
+            /* Couleur appliquée dynamiquement par JS */
+        }
+
+        .answer-option.correct::after {
+            content: '✓';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .answer-option.incorrect {
+            /* Styles appliqués dynamiquement par JS */
+        }
+
+        /* Utility classes */
+        .highlight {
+            font-weight: 700;
+        }
+
+        .danger {
+            font-weight: 700;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1C2467',
+                        secondary: '#7373F3',
+                        'pillar-1': '#80D0E9',
+                        'pillar-2': '#BBBC4C',
+                        'pillar-3': '#F96E18',
+                        'pillar-4': '#C1CFF4',
+                        'pillar-5': '#FF453E',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-sans p-4 bg-[#7373F3] text-white min-h-screen relative">
+    <!-- Decorative elements -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute w-[29px] h-[29px] top-[15%] left-[5%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[29px] h-[29px] bottom-[10%] right-[8%] rounded-full bg-white/10"></div>
+        <div class="absolute w-3 h-3 top-[12%] left-[4.5%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[23px] h-[23px] top-[30%] left-[8%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[9px] h-[9px] top-[22%] left-[6%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[5px] h-[5px] top-[13%] left-[3%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[11px] h-[11px] bottom-[8%] right-[10%] rounded-full bg-white/10"></div>
+        <div class="absolute w-4 h-4 bottom-[6%] right-[9%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[5px] h-[5px] bottom-[7%] right-[12%] rounded-full bg-white/10"></div>
+        <div class="absolute w-[10px] h-[10px] bottom-[4%] right-[7%] rounded-full bg-white/10"></div>
+    </div>
+
+    <!-- Écran configuration joueurs -->
+    <div class="h-screen justify-center items-center flex-col" id="playerSetup" style="display: none">
+        <header class="text-center">
+            <img src="logo-uxd2.png" alt="Logo">
+        </header>
+        <div class="bg-transparent border-0 p-2.5 max-w-[500px] w-[90%]">
+            <h2 class="text-center mb-5 text-2xl font-semibold font-['Poppins'] text-white leading-normal">Qui ose
+                défier la reines des micro-organismes !</h2>
+            <div id="playerInputs">
+                <div class="mb-3">
+                    <input type="text"
+                        class="player-input w-full py-3 px-4 border border-[#D5D7DA] bg-white text-black text-base rounded-lg focus:outline-none focus:border-[#717680] placeholder:text-[#717680]"
+                        placeholder="Nom du joueur 1" maxlength="15" />
+                </div>
+            </div>
+            <div class="flex gap-2.5 justify-center mt-5">
+                <button id="addPlayerBtn"
+                    class="py-3 px-5 cursor-pointer font-semibold text-base rounded-lg transition-all shadow-sm bg-white border-2 border-primary text-primary hover:bg-gray-100">+
+                    Ajouter un joueur</button>
+                <button id="startGameBtn"
+                    class="py-3 px-5 cursor-pointer font-semibold text-base rounded-lg transition-all shadow-sm bg-primary border border-primary text-white hover:bg-[#151b4d]">Jouer
+                    !</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jeu principal -->
+    <div class="w-full p-4 flex flex-col justify-between h-full" id="gameContainer" style="display: none">
+        <div class="border-0">
+            <header class="text-center w-full flex justify-center">
+                <img src="logo-uxd2.png" alt="Logo" class="my-4">
+            </header>
+            <div class="bg-white w-full rounded-xl p-4 flex flex-col gap-4">
+                <!-- Queen card with health bar -->
+                <div class="border-4 border-primary rounded-2xl p-4 bg-white shadow-lg">
+                    <div class="flex gap-4 items-start">
+                        <div
+                            class=" w-[80px] h-auto rounded-full flex items-center justify-center text-4xl flex-shrink-0 overflow-hidden">
+                            <img src="bacterie-reine.png" alt="Reine Bactéria" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xl font-bold text-primary uppercase tracking-wide">Reine Bactéria</div>
+                            <div class="text-sm leading-relaxed text-gray-800 mb-2" id="narratorText">
+                                Récupérez vite les clés de l'OMS pour l'anéantir !
+                            </div>
+
+                            <!-- Barre de vie de la Reine -->
+                            <div class="mt-2">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="text-xs font-semibold text-primary uppercase">Pouvoir de la Reine</div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="text-xs font-bold text-primary" id="keysProgress">0/5 CLÉS</div>
+                                        <!-- Bouton Admin -->
+                                        <button onclick="toggleAdminMode()"
+                                            class="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 transition-colors"
+                                            id="adminBtn" title="Mode Admin">🔧</button>
+                                    </div>
+                                </div>
+                                <div class="flex gap-1" id="progressBoxes">
+                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
+                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
+                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
+                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
+                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Player section -->
+                <div>
+                    <!-- Dice roll button -->
+                    <button
+                        class="w-full bg-primary rounded-2xl p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-4"
+                        onclick="rollDice()">
+                        <div class="flex items-center gap-3">
+                            <span class="text-6xl">🎲</span>
+                            <div class="text-left">
+                                <div class="text-white text-xl font-bold font-['Staatliches'] uppercase tracking-wide">
+                                    Lancer le dé</div>
+                                <div class="text-white/80 text-sm font-['Inter']">Cliquez pour jouer</div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl px-4 py-2">
+                            <span class="text-5xl font-bold text-primary" id="diceScore">5</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Event cards grid -->
+                <div class="flex flex-row gap-2">
+                    <button
+                        class="bg-[#FF653E] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
+                        onclick="drawCard('security')">
+                        <span class="material-icons text-[40px] text-white">favorite</span>
+                        <div class="text-base leading-tight font-semibold text-white">Case<br>sécurité</div>
+                    </button>
+                    <button
+                        class="bg-[#7373F3] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
+                        onclick="drawCard('surprise')">
+                        <span class="material-icons text-[40px] text-white">help</span>
+                        <div class="text-base leading-tight font-semibold text-white">Case<br>surprise</div>
+                    </button>
+                    <button
+                        class="bg-[#21AA74] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
+                        onclick="drawCard('incident')">
+                        <span class="material-icons text-[40px] text-white">warning</span>
+                        <div class="text-base leading-tight font-semibold text-white">Case<br>incident</div>
+                    </button>
+                </div>
+
+                <!-- Quiz section -->
+                <div class="bg-primary p-4 text-center rounded-2xl cursor-pointer transition-all hover:bg-[#151b4d] hover:-translate-y-0.5"
+                    onclick="togglePillars()">
+                    <div
+                        class="text-4xl font-bold text-white m-0 flex items-center justify-center gap-4 tracking-[2px]">
+                        QUIZ OMS <img src="cle-btn.png" alt="cle-btn" class="w-16 h-16"></div>
+                </div>
+
+                <!-- Bouton Prochain joueur -->
+                <button
+                    class="w-full py-3 px-5 bg-secondary border-2 border-secondary text-white cursor-pointer font-semibold text-base rounded-lg transition-all hover:bg-[#5c5cd9] shadow-sm"
+                    onclick="nextPlayer()">
+                    Prochain joueur
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Animation dé -->
+    <div class="hidden fixed inset-0 bg-black/90 justify-center items-center z-[200]" id="diceAnimation">
+        <div class="text-center">
+            <div class="text-[8em] inline-block dice-3d" id="diceDisplay">🎲</div>
+            <div class="text-2xl mt-5 text-white font-bold" id="diceResult"></div>
+        </div>
+    </div>
+
+    <!-- Modal Événement -->
+    <div class="hidden w-full fixed inset-0 bg-black/80 p-6 z-[100] flex items-center justify-center" id="eventScreen">
+        <div class="w-full h-full p-6 rounded-[40px] flex flex-col justify-center items-center gap-4 relative"
+            id="eventContainer">
+
+            <!-- Header avec icône et titre du type -->
+            <div class="self-stretch flex flex-col justify-start items-start gap-2">
+                <div class="self-stretch flex justify-center items-center gap-4">
+                    <span class="material-icons text-white text-[40px]" id="eventIcon">favorite</span>
+                    <div class="justify-center text-white text-4xl font-normal font-['Staatliches'] uppercase"
+                        id="eventTypeTitle">CASE surprise</div>
+                </div>
+            </div>
+
+            <!-- Contenu blanc -->
+            <div
+                class="self-stretch flex-1 p-5 bg-white rounded-[20px] flex flex-col justify-start items-center gap-10 max-h-[calc(100vh-200px)] overflow-y-auto">
+                <div class="self-stretch flex flex-col justify-start items-start gap-4">
+                    <!-- Titre de la carte -->
+                    <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
+                        <div class="self-stretch text-center justify-center text-xl font-bold font-['Poppins']"
+                            id="eventTitle">DÉSINFECTION COMPLÈTE</div>
+                        <div class="self-stretch justify-start font-['Inter'] text-base font-normal text-black"
+                            id="eventStory"></div>
+                    </div>
+
+                    <!-- Section EFFET avec bordure -->
+                    <div class="self-stretch p-3 rounded-lg flex justify-start items-center gap-3" id="effectSection">
+                        <div class="flex-1 flex justify-center items-center gap-4">
+                            <div class="flex-1 self-stretch flex flex-col justify-center items-center gap-1.5">
+                                <div class="self-stretch justify-start text-xl font-normal font-['Staatliches']">EFFET
+                                </div>
+                                <div class="self-stretch justify-start text-sm font-normal font-['Inter'] text-black"
+                                    id="eventEffect"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section INFO OMS avec bordure -->
+                    <div class="self-stretch p-5 rounded-lg outline outline-[3px] flex justify-start items-center gap-3"
+                        id="infoSection">
+                        <div class="flex-1 flex justify-center items-center gap-4">
+                            <div class="flex-1 self-stretch flex flex-col justify-center items-center gap-1.5">
+                                <div class="self-stretch justify-start text-xl font-normal font-['Staatliches']"
+                                    id="infoOmsTitle">INFO OMS</div>
+                                <div class="self-stretch justify-start text-sm font-normal font-['Inter'] text-black"
+                                    id="eventFact"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section REINE Bactéria avec image -->
+                    <div
+                        class="self-stretch p-5 bg-primary rounded-lg outline outline-[3px] outline-primary flex justify-start items-start gap-3">
+                        <div class="flex-1 flex justify-center items-center gap-4">
+                            <div class="flex-1 self-stretch flex flex-col gap-1.5">
+                                <div
+                                    class="flex items-center gap-4 text-white text-xl font-normal font-['Staatliches']">
+                                    <img src="bacterie-reine.png" alt="Reine Bactéria" class="w-16 h-20 object-contain">
+                                    REINE Bactéria
+                                </div>
+                                <div class="self-stretch justify-start text-white text-sm font-normal font-['Inter']"
+                                    id="queenReaction"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bouton avec bordure double -->
+            <div class="self-stretch rounded-lg outline outline-1 outline-offset-[-1px] outline-white">
+                <button
+                    class="w-full px-5 py-3 bg-white rounded-lg shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] outline outline-2 outline-offset-[-2px] outline-white flex justify-center items-center gap-2 cursor-pointer transition-all hover:bg-gray-50"
+                    onclick="closeEvent()">
+                    <div class="justify-start text-primary text-base font-semibold font-['Inter'] leading-6">Fermer
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Quiz -->
+    <div class="hidden fixed inset-0 bg-black/50 p-6 overflow-y-auto z-[100] flex items-center justify-center"
+        id="quizScreen">
+        <div class="max-w-[600px] w-full mx-auto bg-white border-[10px] p-8 rounded-[20px] relative flex flex-col gap-6"
+            id="quizContainer">
+            <!-- Bouton fermeture -->
+            <button
+                class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-0 leading-none font-light"
+                onclick="closeQuiz()">&times;</button>
+
+            <!-- Contenu Quiz (mode normal) -->
+            <div id="quizContent">
+                <!-- Header avec icône et titre du pilier -->
+                <div class="text-center">
+                    <div class="text-6xl mb-3" id="quizIcon">📚</div>
+                    <div class="text-2xl font-bold font-['Poppins'] text-black mb-2" id="quizPillarTitle">Pilier</div>
+                    <div class="text-sm font-semibold font-['Inter'] text-gray-600" id="quizProgress"></div>
+                </div>
+
+                <!-- Question -->
+                <div class="font-['Poppins'] font-semibold text-xl text-black leading-relaxed text-center"
+                    id="questionText"></div>
+
+                <!-- Réponses -->
+                <div class="flex flex-col gap-3" id="answersContainer"></div>
+
+                <!-- Explication -->
+                <div class="hidden p-5 bg-white rounded-lg border-2 border-gray-200" id="explanationBox">
+                    <div class="font-['Inter'] text-sm text-black leading-relaxed" id="explanationText"></div>
+                </div>
+
+                <!-- Réaction de la Reine -->
+                <div class="hidden p-5 rounded-lg text-white font-['Poppins'] font-semibold text-center"
+                    id="quizQueenReaction"></div>
+
+                <!-- Bouton suivant -->
+                <button
+                    class="hidden w-full py-3 px-6 bg-primary border-2 border-primary text-white cursor-pointer font-semibold rounded-lg text-base transition-all hover:bg-[#151b4d] font-['Inter']"
+                    id="nextQuestionBtn" onclick="nextQuestion()">Question suivante</button>
+            </div>
+
+            <!-- Contenu Échec (mode échec) -->
+            <div id="failureContent" class="hidden flex flex-col gap-6 items-center justify-center">
+                <!-- Titre -->
+                <div class="text-center">
+                    <div class="font-['Staatliches'] text-[80px] text-white text-center leading-[0.9] font-normal">LA
+                        REINE TRIOMPHE !</div>
+                </div>
+
+                <!-- Warning box -->
+                <div class="border-2 border-white/30 bg-white/10 p-5 rounded-lg text-white text-center">
+                    <div class="font-['Poppins'] font-bold text-lg mb-2">⚠️ PILIER BLOQUÉ</div>
+                    <div class="font-['Inter'] text-sm">Révisez avant de retenter !</div>
+                </div>
+
+                <!-- Bouton -->
+                <button
+                    class="w-full py-3 px-6 bg-white text-[#E85D4A] border-0 cursor-pointer font-semibold rounded-lg text-base transition-all hover:bg-gray-100 font-['Inter']"
+                    onclick="closeQuiz()">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sélection des Piliers -->
+    <div class="hidden w-full fixed inset-0 bg-black/80 p-6 overflow-y-auto z-[100] flex items-center justify-center"
+        id="pillarsModal">
+        <div class="w-full h-full bg-primary border-0 rounded-[20px] p-6 flex flex-col justify-center gap-4">
+            <!-- Contenu blanc agrandi -->
+            <div
+                class="self-stretch flex-1 bg-white rounded-[20px] p-6 flex flex-col justify-start gap-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+                <!-- Header avec titre QUIZ OMS et icônes de clés -->
+                <div class="text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <h2 class="text-4xl font-bold text-primary m-0">QUIZ OMS</h2>
+                        <img src="cle-btn.png" alt="clé" class="w-12 h-12">
+                    </div>
+                </div>
+
+                <!-- Pillars list verticale -->
+                <div class="flex flex-col gap-3">
+                    <!-- Pilier 1: Propreté -->
+                    <button
+                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
+                        style="background-color: var(--pillar-1-color)" onclick="startPillarQuiz(0)">
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img src="white-key.png" alt="key" class="w-20">
+                            <div class="text-sm font-bold text-white leading-tight">Prenez l'habitude de la propreté
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Pilier 2: Cru/Cuit -->
+                    <button
+                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
+                        style="background-color: var(--pillar-2-color)" onclick="startPillarQuiz(1)">
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img src="white-key.png" alt="key" class="w-20">
+                            <div class="text-sm font-bold text-white leading-tight">Séparez les aliments crus des
+                                aliments
+                                cuits</div>
+                        </div>
+                    </button>
+
+                    <!-- Pilier 3: Cuisson -->
+                    <button
+                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
+                        style="background-color: var(--pillar-3-color)" onclick="startPillarQuiz(2)">
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img src="white-key.png" alt="key" class="w-20">
+                            <div class="text-sm font-bold text-white leading-tight">Faites bien cuire les aliments</div>
+                        </div>
+                    </button>
+
+                    <!-- Pilier 4: Température -->
+                    <button
+                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
+                        style="background-color: var(--pillar-4-color)" onclick="startPillarQuiz(3)">
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img src="white-key.png" alt="key" class="w-20">
+                            <div class="text-sm font-bold text-white leading-tight">Maintenez les aliments à bonne
+                                température</div>
+                        </div>
+                    </button>
+
+                    <!-- Pilier 5: Sûreté -->
+                    <button
+                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
+                        style="background-color: var(--pillar-5-color)" onclick="startPillarQuiz(4)">
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img src="white-key.png" alt="key" class="w-20">
+                            <div class="text-sm font-bold text-white leading-tight">Utilisez de l'eau et des aliments
+                                sûrs
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bouton fermer avec bordure double -->
+            <div class="self-stretch rounded-lg outline outline-1 outline-offset-[-1px] outline-white">
+                <button
+                    class="w-full px-5 py-3 bg-white rounded-lg shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] outline outline-2 outline-offset-[-2px] outline-white flex justify-center items-center gap-2 cursor-pointer transition-all hover:bg-gray-50"
+                    onclick="closePillarsModal()">
+                    <div class="justify-start text-primary text-base font-semibold font-['Inter'] leading-6">Fermer
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données du jeu (VERSION COMPLÈTE)
+
+        let gameData = null;
+        let currentAudio = null; // Audio global pour gérer la lecture
+
+        fetch("jeu-cartes.json")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur chargement JSON");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("JSON chargé :", data);
+                gameData = data; // variable globale
+            })
+            .catch(error => {
+                console.error("Erreur :", error);
+            });
+
+        // Fonction pour jouer un audio
+        function playAudio(audioPath) {
+            // Arrêter l'audio en cours s'il existe
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            // Créer et jouer le nouvel audio
+            if (audioPath) {
+                currentAudio = new Audio(audioPath);
+                currentAudio.play().catch(error => {
+                    console.error("Erreur lecture audio:", error);
+                });
+            }
+        }
+
+        // Fonction pour arrêter l'audio
+        function stopAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+        }
+
+        // Gestion des joueurs
+        let players = [];
+        let currentPlayerIndex = 0;
+        let playerQuestions = {};
+        let playerKeys = {}; // Clés gagnées par chaque joueur
+        let adminMode = false; // Mode admin pour retirer des clés
+
+        function addPlayer() {
+            const container = document.getElementById("playerInputs");
+            const playerCount = container.children.length;
+
+            // Limiter à 4 joueurs maximum
+            if (playerCount >= 4) {
+                alert("Maximum 4 joueurs autorisés !");
+                return;
+            }
+
+            const div = document.createElement("div");
+            div.className = "mb-3";
+            div.innerHTML = `<input type="text" class="player-input w-full py-3 px-4 border border-[#D5D7DA] bg-white text-black text-base rounded-lg focus:outline-none focus:border-[#717680] placeholder:text-[#717680]" placeholder="Nom du joueur ${playerCount + 1}" maxlength="15" />`;
+            container.appendChild(div);
+
+            // Désactiver le bouton si on atteint 4 joueurs
+            if (playerCount + 1 >= 4) {
+                document.getElementById("addPlayerBtn").disabled = true;
+                document.getElementById("addPlayerBtn").classList.add("opacity-50", "cursor-not-allowed");
+            }
+        }
+
+        function startGame() {
+            const inputs = document.querySelectorAll(".player-input");
+            players = Array.from(inputs)
+                .map((input) => input.value.trim())
+                .filter((name) => name !== "");
+
+            if (players.length < 2) {
+                alert("Le jeu nécessite au minimum 2 joueurs !");
+                return;
+            }
+
+            if (players.length > 4) {
+                alert("Maximum 4 joueurs autorisés !");
+                return;
+            }
+
+            // Initialiser le stockage des questions et des clés pour chaque joueur
+            players.forEach((player) => {
+                playerQuestions[player] = {};
+                for (let i = 0; i < 5; i++) {
+                    playerQuestions[player][i] = [];
+                }
+                playerKeys[player] = []; // Tableau vide pour les clés gagnées
+            });
+
+            document.getElementById("playerSetup").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+            updatePlayerDisplay();
+        }
+
+        // Update player display
+        function updatePlayerDisplay() {
+            if (players.length > 0) {
+                const currentPlayer = players[currentPlayerIndex];
+                const playerNameSpan = document.querySelector("#currentPlayerName");
+                if (playerNameSpan) {
+                    playerNameSpan.textContent = currentPlayer;
+                }
+                // Mettre à jour la barre de progression avec les clés du joueur actuel
+                updatePlayerProgressBar();
+            }
+        }
+
+        // Fonction pour passer au joueur suivant
+        function nextPlayer() {
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            updatePlayerDisplay();
+            updateNarrator(`C'est au tour de <span class="highlight">${players[currentPlayerIndex]}</span> de jouer !`);
+        }
+
+        // Track completed pillars
+        let completedPillars = [];
+
+        // Update progress bar
+        function updateProgress() {
+            const progressBoxes = document.querySelectorAll('.progress-box');
+            const progressText = document.querySelector('.progress-text');
+
+            completedPillars.forEach((pillarIndex, index) => {
+                if (progressBoxes[index]) {
+                    progressBoxes[index].classList.remove('empty');
+                    progressBoxes[index].classList.add(`pillar-${pillarIndex + 1}`);
+                }
+            });
+
+            if (progressText) {
+                progressText.textContent = `${completedPillars.length}/5 CLÉS`;
+            }
+        }
+
+        // Roll dice with fullscreen animation
+        let currentDiceValue = 5;
+        function rollDice() {
+            const diceAnim = document.getElementById("diceAnimation");
+            const diceDisplay = document.getElementById("diceDisplay");
+            const diceResultText = document.getElementById("diceResult");
+            const diceScore = document.getElementById("diceScore");
+
+            const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+            diceAnim.classList.add("active");
+            diceResultText.textContent = "";
+
+            let counter = 0;
+            const interval = setInterval(() => {
+                diceDisplay.textContent = diceFaces[Math.floor(Math.random() * 6)];
+                counter++;
+                if (counter > 10) {
+                    clearInterval(interval);
+                    const result = Math.floor(Math.random() * 6) + 1;
+                    currentDiceValue = result;
+                    diceDisplay.textContent = diceFaces[result - 1];
+                    diceResultText.textContent = `Vous avancez de ${result} case${result > 1 ? "s" : ""} !`;
+
+                    // Update dice score in player section
+                    diceScore.textContent = result;
+
+                    setTimeout(() => {
+                        diceAnim.classList.remove("active");
+                        updateNarrator(
+                            `🎲 Le dé donne <span class="highlight">${result}</span> ! ${players[currentPlayerIndex]} avance de ${result} case${result > 1 ? "s" : ""} !`
+                        );
+                    }, 1500);
+                }
+            }, 100);
+        }
+
+        // Toggle pillars modal
+        function togglePillars() {
+            if (!gameData) {
+                alert("Les données du jeu ne sont pas encore chargées. Veuillez patienter.");
+                return;
+            }
+            const pillarsModal = document.getElementById("pillarsModal");
+            pillarsModal.classList.add("active");
+            pillarsModal.style.display = "flex";
+        }
+
+        // Close pillars modal
+        function closePillarsModal() {
+            const pillarsModal = document.getElementById("pillarsModal");
+            pillarsModal.classList.remove("active");
+            pillarsModal.style.display = "none";
+        }
+
+        // Update narrator text
+        function updateNarrator(text) {
+            document.getElementById("narratorText").innerHTML = text;
+        }
+
+        // Draw event card
+        function drawCard(type) {
+            const messages = {
+                'security': 'Vous avez tiré une carte <strong>Sécurité</strong> ! ✨ Bonus de protection !',
+                'surprise': 'Vous avez tiré une carte <strong>Surprise</strong> ! 🎁 Découvrez ce qui vous attend !',
+                'incident': 'Vous avez tiré une carte <strong>Incident</strong> ! ⚠️ Attention, danger !'
+            };
+            updateNarrator(messages[type] || 'Carte tirée !');
+        }
+
+        // Initialisation
+        window.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("playerSetup").style.display = "flex";
+
+            // Ajouter les event listeners pour les boutons
+            document.getElementById("addPlayerBtn").addEventListener("click", addPlayer);
+            document.getElementById("startGameBtn").addEventListener("click", startGame);
+        });
+
+
+        let currentPillar = 0;
+        let currentQuestion = 0;
+        let answered = false;
+        let correctAnswersCount = 0;
+        let failedPillars = {};
+        let selectedQuestions = []; // Questions sélectionnées pour ce pilier
+        let lastAnswerWasWrong = false; // Flag pour tracker si la dernière réponse était fausse
+
+        // Fonction pour mélanger un tableau (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Fonction pour sélectionner 3 questions aléatoires
+        function selectRandomQuestions(pillarIndex) {
+            const pillar = gameData.pillars[pillarIndex];
+            const shuffled = shuffleArray(pillar.questions);
+            return shuffled.slice(0, 3); // Prendre les 3 premières après mélange
+        }
+
+        function updateNarrator(text) {
+            document.getElementById("narratorText").innerHTML = text;
+        }
+
+
+
+        function drawCard(type) {
+            const cards =
+                type === "incident"
+                    ? gameData.incidents
+                    : type === "security"
+                        ? gameData.security
+                        : gameData.surprises;
+            const card = cards[Math.floor(Math.random() * cards.length)];
+
+            // Définir l'icône Material Icons selon le type
+            const iconMap = {
+                'security': 'favorite',
+                'surprise': 'help',
+                'incident': 'warning'
+            };
+
+            // Définir le titre du type selon le type
+            const typeTitleMap = {
+                'security': 'CASE SÉCURITÉ',
+                'surprise': 'CASE SURPRISE',
+                'incident': 'CASE INCIDENT'
+            };
+
+            document.getElementById("eventIcon").textContent = iconMap[type] || 'favorite';
+            document.getElementById("eventTypeTitle").textContent = typeTitleMap[type] || 'CASE SURPRISE';
+            document.getElementById("eventTitle").textContent = card.title;
+            document.getElementById("eventStory").innerHTML = card.story;
+            document.getElementById("eventEffect").textContent = card.effect;
+            document.getElementById("queenReaction").innerHTML = card.queenReaction;
+            document.getElementById("eventFact").textContent = card.fact;
+
+            // Appliquer les couleurs aux sections EFFET et INFO OMS
+            const effectSection = document.getElementById("effectSection");
+            const infoSection = document.getElementById("infoSection");
+
+            // Couleurs selon le type
+            const colorMap = {
+                'security': {
+                    bg: '#FF653E',
+                    outline: '#FF653E',
+                    text: '#FF653E'
+                },
+                'surprise': {
+                    bg: '#7373F3',
+                    outline: '#7373F3',
+                    text: '#7373F3'
+                },
+                'incident': {
+                    bg: '#21AA74',
+                    outline: '#21AA74',
+                    text: '#21AA74'
+                }
+            };
+
+
+            const colors = colorMap[type] || colorMap['surprise'];
+
+            // Appliquer la couleur au titre de la carte
+            const eventTitle = document.getElementById("eventTitle");
+            eventTitle.style.color = colors.text;
+
+            // Appliquer les styles à la section EFFET
+            effectSection.style.backgroundColor = colors.bg;
+            effectSection.style.outlineColor = colors.bg;
+            effectSection.querySelector('.text-xl').style.color = 'white';
+            effectSection.querySelector('.text-sm').style.color = 'white';
+
+            // Appliquer les styles à la section INFO OMS
+            infoSection.style.backgroundColor = 'white';
+            infoSection.style.outlineColor = colors.outline;
+
+            // Appliquer la couleur au titre INFO OMS
+            const infoOmsTitle = document.getElementById("infoOmsTitle");
+            infoOmsTitle.style.color = colors.text;
+
+            // Jouer l'audio de la carte
+            if (card.file) {
+                playAudio(card.file);
+            }
+
+            // Show modal and add event type class for styling
+            const eventScreen = document.getElementById("eventScreen");
+            eventScreen.style.display = "flex";
+            eventScreen.classList.add(type);
+        }
+
+
+        function closeEvent() {
+            stopAudio(); // Arrêter l'audio
+            const eventScreen = document.getElementById("eventScreen");
+            eventScreen.style.display = "none";
+            eventScreen.classList.remove("security", "surprise", "incident");
+        }
+
+        function startPillarQuiz(pillarIndex) {
+            currentPillar = pillarIndex;
+            currentQuestion = 0;
+            correctAnswersCount = 0;
+            answered = false;
+            lastAnswerWasWrong = false; // Réinitialiser le flag
+
+            // Sélectionner 3 questions aléatoires parmi les 5
+            selectedQuestions = selectRandomQuestions(pillarIndex);
+
+            // Définir la couleur de bordure du quiz selon le pilier
+            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.style.borderColor = pillarColors[pillarIndex];
+
+            closePillarsModal();
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const pillar = gameData.pillars[currentPillar];
+            const question = selectedQuestions[currentQuestion]; // Utiliser les questions sélectionnées
+
+            document.getElementById("quizIcon").textContent = pillar.icon;
+            document.getElementById("quizPillarTitle").textContent = pillar.title;
+            document.getElementById("quizProgress").textContent = `Question ${currentQuestion + 1}/3 | ✅ ${correctAnswersCount}/3`;
+            document.getElementById("questionText").textContent = question.q;
+
+            const container = document.getElementById("answersContainer");
+            container.innerHTML = "";
+            question.a.forEach((answer, index) => {
+                const div = document.createElement("div");
+                div.className = "answer-option";
+                div.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong> ${answer}`;
+                div.onclick = () => selectAnswer(index);
+                container.appendChild(div);
+            });
+
+            document.getElementById("explanationBox").classList.remove("active");
+            document.getElementById("explanationBox").style.display = "none";
+            document.getElementById("quizQueenReaction").style.display = "none";
+            document.getElementById("nextQuestionBtn").style.display = "none"; // Cacher le bouton
+            document.getElementById("quizScreen").classList.add("active");
+            document.getElementById("quizScreen").style.display = "flex";
+            answered = false;
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answered) return;
+            answered = true;
+
+            const pillar = gameData.pillars[currentPillar];
+            const question = selectedQuestions[currentQuestion]; // Utiliser les questions sélectionnées
+            const isCorrect = selectedIndex === question.correct;
+            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+
+            const options = document.querySelectorAll(".answer-option");
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add("correct");
+                    option.style.backgroundColor = pillarColors[currentPillar];
+                    option.style.borderColor = pillarColors[currentPillar];
+                    option.style.color = "white";
+                }
+                else if (index === selectedIndex && !isCorrect) {
+                    option.classList.add("incorrect");
+                    option.style.backgroundColor = "#f8d7da";
+                    option.style.borderColor = "#dc3545";
+                }
+                option.style.pointerEvents = "none";
+            });
+
+            document.getElementById("explanationText").innerHTML =
+                `<strong>💡 EXPLICATION</strong><br><br>${question.explanation}<br><br><strong>💡 OMS:</strong> ${question.fact}`;
+            document.getElementById("explanationBox").style.display = "block";
+
+            const reaction = document.getElementById("quizQueenReaction");
+            reaction.style.display = "block";
+            reaction.style.backgroundColor = pillarColors[currentPillar];
+
+            if (isCorrect) {
+                correctAnswersCount++;
+                reaction.innerHTML = `BONNE RÉPONSE ! 😤 Plus que ${3 - correctAnswersCount} !`;
+                const nextBtn = document.getElementById("nextQuestionBtn");
+                if (correctAnswersCount === 3) {
+                    // Afficher le bouton pour récupérer la clé
+                    nextBtn.textContent = "Récupérer ma clé ! 🔑";
+                    nextBtn.style.display = "block";
+                } else {
+                    // Afficher le bouton pour passer à la question suivante
+                    nextBtn.textContent = "Question suivante";
+                    nextBtn.style.display = "block";
+                }
+            } else {
+                // Jouer l'audio d'erreur pour mauvaise réponse
+                const errorAudios = ['audio/erreur/erreur-1.mp3', 'audio/erreur/erreur-2.mp3', 'audio/erreur/erreur-3.mp3'];
+                const randomErrorAudio = errorAudios[Math.floor(Math.random() * errorAudios.length)];
+                playAudio(randomErrorAudio);
+
+                lastAnswerWasWrong = true; // Marquer que la réponse était fausse
+                reaction.innerHTML = `MOUAHAHAHA ! MAUVAISE RÉPONSE ! 😈`;
+                // Afficher le bouton pour continuer vers l'écran d'échec
+                const nextBtn = document.getElementById("nextQuestionBtn");
+                nextBtn.textContent = "Continuer";
+                nextBtn.style.display = "block";
+            }
+        }
+
+        // Nouvelle fonction pour gérer le passage à la question suivante
+        function nextQuestion() {
+            const nextBtn = document.getElementById("nextQuestionBtn");
+            nextBtn.style.display = "none";
+
+            if (correctAnswersCount === 3) {
+                // Afficher l'écran de victoire
+                showVictory();
+            } else if (lastAnswerWasWrong) {
+                // Si la dernière réponse était incorrecte, transformer la modal en écran d'échec
+                showFailure(currentPillar);
+                lastAnswerWasWrong = false; // Réinitialiser le flag
+            } else {
+                // Passer à la question suivante
+                currentQuestion++;
+                displayQuestion();
+            }
+        }
+
+        function showVictory() {
+            stopAudio(); // Arrêter l'audio
+            document.getElementById("quizScreen").classList.remove("active");
+            document.getElementById("quizScreen").style.display = "none";
+
+            // Ajouter la clé au joueur actuel
+            const currentPlayer = players[currentPlayerIndex];
+            if (!playerKeys[currentPlayer].includes(currentPillar)) {
+                playerKeys[currentPlayer].push(currentPillar);
+            }
+
+            // Mettre à jour la barre de progression avec les clés du joueur actuel
+            updatePlayerProgressBar();
+
+            const pillar = gameData.pillars[currentPillar];
+            updateNarrator(
+                `🎉 CLÉ OBTENUE : <span class="highlight">${pillar.title}</span> ! La Reine est FURIEUSE ! 👑✨`
+            );
+        }
+
+        // Fonction pour mettre à jour la barre de progression du joueur actuel
+        function updatePlayerProgressBar() {
+            const currentPlayer = players[currentPlayerIndex];
+            const playerWonKeys = playerKeys[currentPlayer] || [];
+            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+            const progressBoxes = document.querySelectorAll('#progressBoxes > div');
+
+            // Réinitialiser toutes les cases en gris
+            progressBoxes.forEach(box => {
+                box.style.backgroundColor = '';
+                box.classList.add('bg-gray-300');
+                box.innerHTML = ''; // Vider le contenu
+            });
+
+            // Colorer les cases selon les clés gagnées par le joueur actuel
+            playerWonKeys.forEach((pillarIndex, index) => {
+                if (progressBoxes[index]) {
+                    progressBoxes[index].classList.remove('bg-gray-300');
+                    progressBoxes[index].style.backgroundColor = pillarColors[pillarIndex];
+
+                    // Ajouter bouton de suppression en mode admin
+                    if (adminMode) {
+                        progressBoxes[index].style.position = 'relative';
+                        progressBoxes[index].innerHTML = `
+                            <button onclick="removeKey(${index})" 
+                                style="position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; 
+                                       background: white; border: 1px solid #dc3545; border-radius: 50%; 
+                                       color: #dc3545; font-size: 10px; line-height: 1; cursor: pointer; 
+                                       display: flex; align-items: center; justify-content: center; font-weight: bold;"
+                                title="Retirer cette clé">×</button>
+                        `;
+                    }
+                }
+            });
+
+            // Mettre à jour le compteur de clés
+            document.getElementById('keysProgress').textContent = `${playerWonKeys.length}/5 CLÉS`;
+        }
+
+        // Fonction pour activer/désactiver le mode admin
+        function toggleAdminMode() {
+            adminMode = !adminMode;
+            const adminBtn = document.getElementById('adminBtn');
+            if (adminMode) {
+                adminBtn.style.backgroundColor = '#fecaca';
+                adminBtn.style.borderColor = '#dc3545';
+            } else {
+                adminBtn.style.backgroundColor = '';
+                adminBtn.style.borderColor = '';
+            }
+            updatePlayerProgressBar();
+        }
+
+        // Fonction pour retirer une clé (mode admin)
+        function removeKey(keyIndex) {
+            if (!adminMode) return;
+            const currentPlayer = players[currentPlayerIndex];
+            if (playerKeys[currentPlayer] && playerKeys[currentPlayer][keyIndex] !== undefined) {
+                playerKeys[currentPlayer].splice(keyIndex, 1);
+                updatePlayerProgressBar();
+            }
+        }
+
+        function showFailure(pillarIndex) {
+            // Jouer l'audio d'échec du pilier
+            const failureAudio = `audio/echec-cle/echec-cle-${pillarIndex + 1}.mp3`;
+            playAudio(failureAudio);
+
+            // Transformer la modal de quiz en modal d'échec
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.style.backgroundColor = '#E85D4A';
+            quizContainer.style.borderColor = '#E85D4A';
+
+            // Cacher le contenu du quiz et afficher le contenu d'échec
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('failureContent').style.display = 'flex';
+        }
+
+        function closeQuiz() {
+            stopAudio(); // Arrêter l'audio
+
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.style.backgroundColor = '#FFFFFF';
+
+            // Afficher le contenu du quiz et cacher le contenu d'échec
+            document.getElementById('quizContent').style.display = 'block';
+            document.getElementById('failureContent').style.display = 'none';
+
+            // Fermer la modal
+            document.getElementById("quizScreen").classList.remove("active");
+            document.getElementById("quizScreen").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
