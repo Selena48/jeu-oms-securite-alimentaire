@@ -268,6 +268,10 @@
                                     <div class="text-xs font-semibold text-primary uppercase">Pouvoir de la Reine</div>
                                     <div class="flex items-center gap-2">
                                         <div class="text-xs font-bold text-primary" id="keysProgress">0/5 CLÉS</div>
+                                        <!-- Bouton Musique -->
+                                        <button onclick="toggleBackgroundMusic()"
+                                            class="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 transition-colors"
+                                            id="musicBtn" title="Activer/Désactiver la musique">🔊</button>
                                         <!-- Bouton Admin -->
                                         <button onclick="toggleAdminMode()"
                                             class="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 transition-colors"
@@ -590,7 +594,46 @@
         // Données du jeu (VERSION COMPLÈTE)
 
         let gameData = null;
-        let currentAudio = null; // Audio global pour gérer la lecture
+        // Audio management
+        let currentAudio = null;
+        let backgroundMusic = null;
+        let isMusicMuted = false;
+
+        // Initialiser la musique de fond
+        function initBackgroundMusic() {
+            backgroundMusic = new Audio('audio/musique-audio.mp3');
+            backgroundMusic.loop = true;
+            backgroundMusic.volume = 0.3; // Volume à 30%
+        }
+
+        // Démarrer la musique de fond
+        function startBackgroundMusic() {
+            if (backgroundMusic && !isMusicMuted) {
+                backgroundMusic.play().catch(error => {
+                    console.log("Autoplay bloqué, cliquez sur le bouton musique");
+                });
+            }
+        }
+
+        // Basculer la musique de fond
+        function toggleBackgroundMusic() {
+            if (!backgroundMusic) {
+                initBackgroundMusic();
+            }
+
+            isMusicMuted = !isMusicMuted;
+            const musicBtn = document.getElementById('musicBtn');
+
+            if (isMusicMuted) {
+                backgroundMusic.pause();
+                musicBtn.textContent = '🔇'; // Icône mute
+                musicBtn.title = 'Activer la musique';
+            } else {
+                backgroundMusic.play();
+                musicBtn.textContent = '🔊'; // Icône son
+                musicBtn.title = 'Désactiver la musique';
+            }
+        } // Audio global pour gérer la lecture
 
         fetch("jeu-cartes.json")
             .then(response => {
@@ -688,6 +731,10 @@
             document.getElementById("playerSetup").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
             updatePlayerDisplay();
+
+            // Initialiser et démarrer la musique de fond
+            initBackgroundMusic();
+            startBackgroundMusic();
         }
 
         // Update player display
