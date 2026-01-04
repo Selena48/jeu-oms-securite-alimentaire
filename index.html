@@ -4,13 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=jeu-wireframe.html">
-    <title>Jeu OMS - Sécurité Alimentaire</title>
+    <title>Panique dans la Cuisine - OMS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#272727',
+                        secondary: '#F8F7F1',
+                        bacteria: '#423567',
+                        'pillar-1': '#8BDFE7',
+                        'pillar-2': '#8DC947',
+                        'pillar-3': '#FFD04C',
+                        'pillar-4': '#FFA1C8',
+                        'pillar-5': '#FF6459',
+                    },
+                    fontFamily: {
+                        'staatliches': ['Staatliches', 'cursive'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #F8F7F1;
+            background-image: url('bg-start.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+
+        .decorative-key {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        .key-1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .key-2 {
+            top: 15%;
+            right: 8%;
+            animation-delay: 0.5s;
+        }
+
+        .key-3 {
+            bottom: 25%;
+            left: 10%;
+            animation-delay: 1s;
+        }
+
+        .key-4 {
+            bottom: 20%;
+            right: 5%;
+            animation-delay: 1.5s;
+        }
+
+        .key-5 {
+            top: 50%;
+            left: 2%;
+            animation-delay: 2s;
+        }
+
+        .veggie {
+            position: absolute;
+            animation: wiggle 4s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
+        .veggie-1 {
+            top: 20%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .veggie-2 {
+            top: 60%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+
+        .veggie-3 {
+            bottom: 15%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+    </style>
 </head>
 
-<body>
-    <p>Redirection vers le jeu...</p>
-    <p>Si la redirection ne fonctionne pas, <a href="jeu-wireframe.html">cliquez ici</a>.</p>
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-md w-full text-center">
+
+        <!-- Logo OMS-->
+        <div class="mt-6">
+            <img src="logo-uxd2.png" alt="Logo OMS" class="mx-auto h-[12rem]">
+        </div>
+
+        <!-- Subtitle -->
+        <p class="font-poppins text-base text-xl font-semibold text-primary py-8 px-4">
+            Qui osera défier la reines des micro-organismes ?
+        </p>
+
+        <!-- CTA Button -->
+        <button onclick="window.location.href='mode-selection.html'"
+            class="bg-primary text-secondary font-inter font-semibold text-xl py-4 px-8 rounded-xl transition-all hover:opacity-90 hover:scale-105 active:scale-95">
+            Lancer une partie !
+        </button>
+
+
+    </div>
+
+    <!-- Global Music Controller -->
+    <script src="music-controller.js"></script>
+
 </body>
 
 </html>

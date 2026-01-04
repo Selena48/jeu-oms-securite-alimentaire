@@ -7,6 +7,29 @@
     <title>La Reine des Micro-organismes</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#272727',
+                        secondary: '#F8F7F1',
+                        bacteria: '#423567',
+                        'pillar-1': '#8BDFE7',
+                        'pillar-2': '#8DC947',
+                        'pillar-3': '#FFD04C',
+                        'pillar-4': '#FFA1C8',
+                        'pillar-5': '#FF6459',
+                    },
+                    fontFamily: {
+                        'staatliches': ['Staatliches', 'cursive'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'poppins': ['poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,52 +43,22 @@
     <style>
         /* Variables CSS personnalisées */
         :root {
-            --pillar-1-color: #80D0E9;
-            --pillar-2-color: #BBBC4C;
-            --pillar-3-color: #F96E18;
-            --pillar-4-color: #C1CFF4;
-            --pillar-5-color: #FF453E;
-            --bg-color: #7373F3;
-            --primary-color: #1C2467;
-            --quiz-bg-color: #E85D4A;
-            --quiz-border-color: #E85D4A;
-            --event-security-bg: #FF653E;
-            --event-incident-bg: #21AA74;
-            --event-surprise-bg: #7373F3;
+            --pillar-1-color: #8BDFE7;
+            --pillar-2-color: #8DC947;
+            --pillar-3-color: #FFD04C;
+            --pillar-4-color: #FFA1C8;
+            --pillar-5-color: #FF6459;
+            --bg-color: #F8F7F1;
+            --primary-color: #272727;
+            --bcteria-color: #423567;
+            --error-color: #FF6459;
+            --success-color: #21AA74;
+
         }
 
         /* Animations */
-        @keyframes diceRoll {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
 
-            25% {
-                transform: rotate(90deg) scale(1.2);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1);
-            }
-
-            75% {
-                transform: rotate(270deg) scale(1.2);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
-        }
-
-        .dice-display.rolling .dice-icon {
-            animation: diceRoll 0.5s ease-in-out;
-        }
-
-        .dice-3d {
-            animation: diceRoll 1s ease-in-out;
-        }
-
-        /* Background image (impossible en Tailwind) */
+        /* Background image disabled - using solid color instead
         body::before {
             content: '';
             position: fixed;
@@ -80,6 +73,7 @@
             opacity: 0.3;
             z-index: -1;
         }
+        */
 
         /* Classes dynamiques pour JavaScript */
         .active {
@@ -119,6 +113,60 @@
             background-color: var(--pillar-5-color) !important;
         }
 
+        /* Key Loss Animation */
+        @keyframes keyLossPopup {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+
+            20% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        #keyLossNotification.show {
+            display: block !important;
+            animation: keyLossPopup 2.5s ease-in-out;
+        }
+
+        /* Progress bar key removal animation */
+        @keyframes keyRemoval {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        .key-removing {
+            animation: keyRemoval 0.5s ease-out forwards;
+        }
+
         /* Event modal backgrounds (appliquées dynamiquement) */
         #eventScreen.security #eventContainer {
             background-color: var(--event-security-bg) !important;
@@ -139,7 +187,7 @@
             padding: 16px 20px;
             cursor: pointer;
             text-align: left;
-            font-family: 'Inter', sans-serif;
+            font-family: 'poppins', sans-serif;
             font-weight: 600;
             font-size: 16px;
             color: #000;
@@ -164,7 +212,7 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 28px;
-            color: white;
+            color: secondary;
             font-weight: bold;
         }
 
@@ -181,459 +229,201 @@
             font-weight: 700;
         }
     </style>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1C2467',
-                        secondary: '#7373F3',
-                        'pillar-1': '#80D0E9',
-                        'pillar-2': '#BBBC4C',
-                        'pillar-3': '#F96E18',
-                        'pillar-4': '#C1CFF4',
-                        'pillar-5': '#FF453E',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 
-<body class="font-sans p-4 bg-[#7373F3] text-white min-h-screen relative">
-    <!-- Decorative elements -->
-    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div class="absolute w-[29px] h-[29px] top-[15%] left-[5%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[29px] h-[29px] bottom-[10%] right-[8%] rounded-full bg-white/10"></div>
-        <div class="absolute w-3 h-3 top-[12%] left-[4.5%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[23px] h-[23px] top-[30%] left-[8%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[9px] h-[9px] top-[22%] left-[6%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[5px] h-[5px] top-[13%] left-[3%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[11px] h-[11px] bottom-[8%] right-[10%] rounded-full bg-white/10"></div>
-        <div class="absolute w-4 h-4 bottom-[6%] right-[9%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[5px] h-[5px] bottom-[7%] right-[12%] rounded-full bg-white/10"></div>
-        <div class="absolute w-[10px] h-[10px] bottom-[4%] right-[7%] rounded-full bg-white/10"></div>
-    </div>
+<body class="font-sans p-8 bg-secondary text-primary min-h-screen relative">
 
-    <!-- Écran configuration joueurs -->
-    <div class="h-screen justify-center items-center flex-col" id="playerSetup" style="display: none">
-        <header class="text-center">
-            <img src="logo-uxd2.png" alt="Logo">
-        </header>
-        <div class="bg-transparent border-0 p-2.5 max-w-[500px] w-[90%]">
-            <h2 class="text-center mb-5 text-2xl font-semibold font-['Poppins'] text-white leading-normal">Qui ose
-                défier la reines des micro-organismes !</h2>
-            <div id="playerInputs">
-                <div class="mb-3">
-                    <input type="text"
-                        class="player-input w-full py-3 px-4 border border-[#D5D7DA] bg-white text-black text-base rounded-lg focus:outline-none focus:border-[#717680] placeholder:text-[#717680]"
-                        placeholder="Nom du joueur 1" maxlength="15" />
-                </div>
+    <!-- Header with Settings & Mode -->
+    <div class="fixed top-4 left-0 w-full px-4 z-[100] flex justify-between items-center pointer-events-none">
+        <div class="w-12 h-12"></div> <!-- Spacer -->
+        <div class="flex-1 flex justify-center">
+            <div class="bg-secondary/50 px-4 py-1 rounded-full backdrop-blur-sm pointer-events-auto">
+                <span id="gameModeDisplay"
+                    class="text-[10px] font-bold text-primary uppercase tracking-[0.2em] leading-none">
+                    CHARGEMENT...
+                </span>
             </div>
-            <div class="flex gap-2.5 justify-center mt-5">
-                <button id="addPlayerBtn"
-                    class="py-3 px-5 cursor-pointer font-semibold text-base rounded-lg transition-all shadow-sm bg-white border-2 border-primary text-primary hover:bg-gray-100">+
-                    Ajouter un joueur</button>
-                <button id="startGameBtn"
-                    class="py-3 px-5 cursor-pointer font-semibold text-base rounded-lg transition-all shadow-sm bg-primary border border-primary text-white hover:bg-[#151b4d]">Jouer
-                    !</button>
-            </div>
+        </div>
+        <div class="pointer-events-auto">
+            <button onclick="toggleSettingsModal()"
+                class="w-12 h-12 flex items-center justify-center bg-secondary/80 rounded-full border-2 border-primary hover:bg-secondary transition-colors shadow-sm">
+                <span class="material-icons text-primary">settings</span>
+            </button>
         </div>
     </div>
 
-    <!-- Jeu principal -->
-    <div class="w-full p-4 flex flex-col justify-between h-full" id="gameContainer" style="display: none">
-        <div class="border-0">
-            <header class="text-center w-full flex justify-center">
-                <img src="logo-uxd2.png" alt="Logo" class="my-4">
-            </header>
-            <div class="bg-white w-full rounded-xl p-4 flex flex-col gap-4">
-                <!-- Queen card with health bar -->
-                <div class="border-4 border-primary rounded-2xl p-4 bg-white shadow-lg">
-                    <div class="flex gap-4 items-start">
-                        <div
-                            class=" w-[80px] h-auto rounded-full flex items-center justify-center text-4xl flex-shrink-0 overflow-hidden">
-                            <img src="bacterie-reine.png" alt="Reine Bactéria" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1">
-                            <div class="text-xl font-bold text-primary uppercase tracking-wide">Reine Bactéria</div>
-                            <div class="text-sm leading-relaxed text-gray-800 mb-2" id="narratorText">
-                                Récupérez vite les clés de l'OMS pour l'anéantir !
-                            </div>
+    <!-- Main content -->
+    <div class="w-full max-w-sm mx-auto relative z-10 flex flex-col gap-4">
 
-                            <!-- Barre de vie de la Reine -->
-                            <div class="mt-2">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="text-xs font-semibold text-primary uppercase">Pouvoir de la Reine</div>
-                                    <div class="flex items-center gap-2">
-                                        <div class="text-xs font-bold text-primary" id="keysProgress">0/5 CLÉS</div>
-                                        <!-- Bouton Musique -->
-                                        <button onclick="toggleBackgroundMusic()"
-                                            class="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 transition-colors"
-                                            id="musicBtn" title="Activer/Désactiver la musique">🔊</button>
-                                        <!-- Bouton Admin -->
-                                        <button onclick="toggleAdminMode()"
-                                            class="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 transition-colors"
-                                            id="adminBtn" title="Mode Admin">🔧</button>
-                                    </div>
-                                </div>
-                                <div class="flex gap-1" id="progressBoxes">
-                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
-                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
-                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
-                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
-                                    <div class="flex-1 h-3 rounded bg-gray-300"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Player section -->
-                <div>
-                    <!-- Dice roll button -->
-                    <button
-                        class="w-full bg-primary rounded-2xl p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-4"
-                        onclick="rollDice()">
-                        <div class="flex items-center gap-3">
-                            <span class="text-6xl">🎲</span>
-                            <div class="text-left">
-                                <div class="text-white text-xl font-bold font-['Staatliches'] uppercase tracking-wide">
-                                    Lancer le dé</div>
-                                <div class="text-white/80 text-sm font-['Inter']">Cliquez pour jouer</div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-xl px-4 py-2">
-                            <span class="text-5xl font-bold text-primary" id="diceScore">5</span>
-                        </div>
-                    </button>
-                </div>
-
-                <!-- Event cards grid -->
-                <div class="flex flex-row gap-2">
-                    <button
-                        class="bg-[#FF653E] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
-                        onclick="drawCard('security')">
-                        <span class="material-icons text-[40px] text-white">favorite</span>
-                        <div class="text-base leading-tight font-semibold text-white">Case<br>sécurité</div>
-                    </button>
-                    <button
-                        class="bg-[#7373F3] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
-                        onclick="drawCard('surprise')">
-                        <span class="material-icons text-[40px] text-white">help</span>
-                        <div class="text-base leading-tight font-semibold text-white">Case<br>surprise</div>
-                    </button>
-                    <button
-                        class="bg-[#21AA74] rounded-2xl py-4 px-4 cursor-pointer text-center font-semibold text-white transition-all flex flex-col items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 flex-1"
-                        onclick="drawCard('incident')">
-                        <span class="material-icons text-[40px] text-white">warning</span>
-                        <div class="text-base leading-tight font-semibold text-white">Case<br>incident</div>
-                    </button>
-                </div>
-
-                <!-- Quiz section -->
-                <div class="bg-primary p-4 text-center rounded-2xl cursor-pointer transition-all hover:bg-[#151b4d] hover:-translate-y-0.5"
-                    onclick="togglePillars()">
-                    <div
-                        class="text-4xl font-bold text-white m-0 flex items-center justify-center gap-4 tracking-[2px]">
-                        QUIZ OMS <img src="cle-btn.png" alt="cle-btn" class="w-16 h-16"></div>
-                </div>
-
-                <!-- Bouton Prochain joueur -->
-                <button
-                    class="w-full py-3 px-5 bg-secondary border-2 border-secondary text-white cursor-pointer font-semibold text-base rounded-lg transition-all hover:bg-[#5c5cd9] shadow-sm"
-                    onclick="nextPlayer()">
-                    Prochain joueur
-                </button>
-            </div>
-
+        <!-- Logo OMS-->
+        <div class="mt-6">
+            <img src="logo-uxd2.png" alt="Logo OMS" class="mx-auto h-[12rem]">
         </div>
-    </div>
 
-    <!-- Animation dé -->
-    <div class="hidden fixed inset-0 bg-black/90 justify-center items-center z-[200]" id="diceAnimation">
-        <div class="text-center">
-            <div class="text-[8em] inline-block dice-3d" id="diceDisplay">🎲</div>
-            <div class="text-2xl mt-5 text-white font-bold" id="diceResult"></div>
-        </div>
-    </div>
-
-    <!-- Modal Événement -->
-    <div class="hidden w-full fixed inset-0 bg-black/80 p-6 z-[100] flex items-center justify-center" id="eventScreen">
-        <div class="w-full h-full p-6 rounded-[40px] flex flex-col justify-center items-center gap-4 relative"
-            id="eventContainer">
-
-            <!-- Header avec icône et titre du type -->
-            <div class="self-stretch flex flex-col justify-start items-start gap-2">
-                <div class="self-stretch flex justify-center items-center gap-4">
-                    <span class="material-icons text-white text-[40px]" id="eventIcon">favorite</span>
-                    <div class="justify-center text-white text-4xl font-normal font-['Staatliches'] uppercase"
-                        id="eventTypeTitle">CASE surprise</div>
-                </div>
+        <!-- Player info card -->
+        <div class="bg-secondary rounded-xl border-2 border-primary p-4 flex flex-col gap-3">
+            <div class="flex flex-col gap-1">
+                <span class="font-staatliches text-2xl text-primary uppercase" id="currentPlayerName">Nom du
+                    joueur</span>
+                <span class="font-poppins">C’est à vous de jouer !</span>
             </div>
 
-            <!-- Contenu blanc -->
-            <div
-                class="self-stretch flex-1 p-5 bg-white rounded-[20px] flex flex-col justify-start items-center gap-10 max-h-[calc(100vh-200px)] overflow-y-auto">
-                <div class="self-stretch flex flex-col justify-start items-start gap-4">
-                    <!-- Titre de la carte -->
-                    <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
-                        <div class="self-stretch text-center justify-center text-xl font-bold font-['Poppins']"
-                            id="eventTitle">DÉSINFECTION COMPLÈTE</div>
-                        <div class="self-stretch justify-start font-['Inter'] text-base font-normal text-black"
-                            id="eventStory"></div>
-                    </div>
-
-                    <!-- Section EFFET avec bordure -->
-                    <div class="self-stretch p-3 rounded-lg flex justify-start items-center gap-3" id="effectSection">
-                        <div class="flex-1 flex justify-center items-center gap-4">
-                            <div class="flex-1 self-stretch flex flex-col justify-center items-center gap-1.5">
-                                <div class="self-stretch justify-start text-xl font-normal font-['Staatliches']">EFFET
-                                </div>
-                                <div class="self-stretch justify-start text-sm font-normal font-['Inter'] text-black"
-                                    id="eventEffect"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section INFO OMS avec bordure -->
-                    <div class="self-stretch p-5 rounded-lg outline outline-[3px] flex justify-start items-center gap-3"
-                        id="infoSection">
-                        <div class="flex-1 flex justify-center items-center gap-4">
-                            <div class="flex-1 self-stretch flex flex-col justify-center items-center gap-1.5">
-                                <div class="self-stretch justify-start text-xl font-normal font-['Staatliches']"
-                                    id="infoOmsTitle">INFO OMS</div>
-                                <div class="self-stretch justify-start text-sm font-normal font-['Inter'] text-black"
-                                    id="eventFact"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section REINE Bactéria avec image -->
-                    <div
-                        class="self-stretch p-5 bg-primary rounded-lg outline outline-[3px] outline-primary flex justify-start items-start gap-3">
-                        <div class="flex-1 flex justify-center items-center gap-4">
-                            <div class="flex-1 self-stretch flex flex-col gap-1.5">
-                                <div
-                                    class="flex items-center gap-4 text-white text-xl font-normal font-['Staatliches']">
-                                    <img src="bacterie-reine.png" alt="Reine Bactéria" class="w-16 h-20 object-contain">
-                                    REINE Bactéria
-                                </div>
-                                <div class="self-stretch justify-start text-white text-sm font-normal font-['Inter']"
-                                    id="queenReaction"></div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Progress bar -->
+            <div class="flex items-center gap-2">
+                <div class="flex gap-1 flex-1" id="progressBoxes">
+                    <div class="flex-1 h-5 rounded bg-gray-300 rounded-tl-[20px] rounded-bl-[20px]"></div>
+                    <div class="flex-1 h-5 rounded bg-gray-300"></div>
+                    <div class="flex-1 h-5 rounded bg-gray-300"></div>
+                    <div class="flex-1 h-5 rounded bg-gray-300"></div>
+                    <div class="flex-1 h-5 rounded bg-gray-300 rounded-tr-[20px] rounded-br-[20px]"></div>
                 </div>
+                <div class="text-xs font-bold text-primary secondaryspace-nowrap" id="keysProgress">0/5 CLÉS</div>
             </div>
 
-            <!-- Bouton avec bordure double -->
-            <div class="self-stretch rounded-lg outline outline-1 outline-offset-[-1px] outline-white">
-                <button
-                    class="w-full px-5 py-3 bg-white rounded-lg shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] outline outline-2 outline-offset-[-2px] outline-white flex justify-center items-center gap-2 cursor-pointer transition-all hover:bg-gray-50"
-                    onclick="closeEvent()">
-                    <div class="justify-start text-primary text-base font-semibold font-['Inter'] leading-6">Fermer
-                    </div>
-                </button>
+            <!-- Quiz section -->
+            <div class="p-4 text-center rounded-xl cursor-pointer transition-all hover:opacity-90 hover:-translate-y-0.5"
+                style="background: linear-gradient(110deg, #8BDFE7, #8DC947, #FFD04C, #FFA1C8, #FF6459);"
+                onclick="window.location.href='pillar-selection.html'">
+                <div
+                    class="text-3xl font-bold text-secondary m-0 flex items-center justify-center gap-4 tracking-[2px]">
+                    QUIZ OMS <img src="cles-oms.png" alt="cle-btn" class="w-16"></div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal Quiz -->
-    <div class="hidden fixed inset-0 bg-black/50 p-6 overflow-y-auto z-[100] flex items-center justify-center"
-        id="quizScreen">
-        <div class="max-w-[600px] w-full mx-auto bg-white border-[10px] p-8 rounded-[20px] relative flex flex-col gap-6"
-            id="quizContainer">
-            <!-- Bouton fermeture -->
+
+        <!-- Chance and Malchance cards -->
+        <div class="bg-[#2C2C2C] rounded-2xl p-4 flex gap-3">
+            <!-- Case Chance -->
             <button
-                class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-0 leading-none font-light"
-                onclick="closeQuiz()">&times;</button>
-
-            <!-- Contenu Quiz (mode normal) -->
-            <div id="quizContent">
-                <!-- Header avec icône et titre du pilier -->
-                <div class="text-center">
-                    <div class="text-6xl mb-3" id="quizIcon">📚</div>
-                    <div class="text-2xl font-bold font-['Poppins'] text-black mb-2" id="quizPillarTitle">Pilier</div>
-                    <div class="text-sm font-semibold font-['Inter'] text-gray-600" id="quizProgress"></div>
+                class="flex-1 w-1/2 bg-secondary rounded-2xl p-6 cursor-pointer transition-all hover:opacity-90 hover:-translate-y-1 flex flex-col items-center justify-center gap-3 border-2 border-secondary"
+                onclick="drawCard('chance')">
+                <img src="expert.svg" alt="expert" class="w-16 h-16">
+                <div class="text-base font-bold text-primary font-poppins leading-tight text-center">Case<br>chance
                 </div>
+            </button>
 
-                <!-- Question -->
-                <div class="font-['Poppins'] font-semibold text-xl text-black leading-relaxed text-center"
-                    id="questionText"></div>
-
-                <!-- Réponses -->
-                <div class="flex flex-col gap-3" id="answersContainer"></div>
-
-                <!-- Explication -->
-                <div class="hidden p-5 bg-white rounded-lg border-2 border-gray-200" id="explanationBox">
-                    <div class="font-['Inter'] text-sm text-black leading-relaxed" id="explanationText"></div>
+            <!-- Case Malchance -->
+            <button
+                class="flex-1 w-1/2 bg-bacteria rounded-2xl p-6 cursor-pointer transition-all hover:opacity-90 hover:-translate-y-1 flex flex-col items-center justify-center gap-3 border-2 border-secondary"
+                onclick="drawCard('malchance')">
+                <img src="bacteria.svg" alt="malchance" class="w-16 h-16">
+                <div class="text-base font-bold text-secondary font-poppins leading-tight text-center">Case<br>malchance
                 </div>
-
-                <!-- Réaction de la Reine -->
-                <div class="hidden p-5 rounded-lg text-white font-['Poppins'] font-semibold text-center"
-                    id="quizQueenReaction"></div>
-
-                <!-- Bouton suivant -->
-                <button
-                    class="hidden w-full py-3 px-6 bg-primary border-2 border-primary text-white cursor-pointer font-semibold rounded-lg text-base transition-all hover:bg-[#151b4d] font-['Inter']"
-                    id="nextQuestionBtn" onclick="nextQuestion()">Question suivante</button>
-            </div>
-
-            <!-- Contenu Échec (mode échec) -->
-            <div id="failureContent" class="hidden flex flex-col gap-6 items-center justify-center">
-                <!-- Titre -->
-                <div class="text-center">
-                    <div class="font-['Staatliches'] text-[80px] text-white text-center leading-[0.9] font-normal">LA
-                        REINE TRIOMPHE !</div>
-                </div>
-
-                <!-- Warning box -->
-                <div class="border-2 border-white/30 bg-white/10 p-5 rounded-lg text-white text-center">
-                    <div class="font-['Poppins'] font-bold text-lg mb-2">⚠️ PILIER BLOQUÉ</div>
-                    <div class="font-['Inter'] text-sm">Révisez avant de retenter !</div>
-                </div>
-
-                <!-- Bouton -->
-                <button
-                    class="w-full py-3 px-6 bg-white text-[#E85D4A] border-0 cursor-pointer font-semibold rounded-lg text-base transition-all hover:bg-gray-100 font-['Inter']"
-                    onclick="closeQuiz()">Retour</button>
-            </div>
+            </button>
         </div>
+
+        <!-- Bouton Prochain joueur -->
+        <button
+            class="w-full py-3 px-5 font-poppins font-semibold bg-secondary text-primary cursor-pointer font-semibold text-base rounded-lg transition-all hover:opacity-90 border-2 border-primary"
+            onclick="nextPlayer()">
+            Joueur suivant
     </div>
 
-    <!-- Modal Sélection des Piliers -->
-    <div class="hidden w-full fixed inset-0 bg-black/80 p-6 overflow-y-auto z-[100] flex items-center justify-center"
-        id="pillarsModal">
-        <div class="w-full h-full bg-primary border-0 rounded-[20px] p-6 flex flex-col justify-center gap-4">
-            <!-- Contenu blanc agrandi -->
-            <div
-                class="self-stretch flex-1 bg-white rounded-[20px] p-6 flex flex-col justify-start gap-6 max-h-[calc(100vh-200px)] overflow-y-auto">
-                <!-- Header avec titre QUIZ OMS et icônes de clés -->
-                <div class="text-center">
-                    <div class="flex items-center justify-center gap-2">
-                        <h2 class="text-4xl font-bold text-primary m-0">QUIZ OMS</h2>
-                        <img src="cle-btn.png" alt="clé" class="w-12 h-12">
-                    </div>
-                </div>
+    <!-- Modal Malchance (Fullscreen Image Only) -->
+    <div class="hidden fixed inset-0 bg-primary z-[200] flex items-center justify-center cursor-pointer"
+        id="malchanceScreen" onclick="closeMalchance()">
+        <img id="malchanceImage" src="" alt="Malchance" class="max-w-full max-h-full object-contain">
+    </div>
 
-                <!-- Pillars list verticale -->
-                <div class="flex flex-col gap-3">
-                    <!-- Pilier 1: Propreté -->
-                    <button
-                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
-                        style="background-color: var(--pillar-1-color)" onclick="startPillarQuiz(0)">
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <img src="white-key.png" alt="key" class="w-20">
-                            <div class="text-sm font-bold text-white leading-tight">Prenez l'habitude de la propreté
-                            </div>
-                        </div>
-                    </button>
+    <!-- Modal Chance (Fullscreen Image Only) -->
+    <div class="hidden fixed inset-0 bg-primary z-[200] flex items-center justify-center cursor-pointer"
+        id="chanceScreen" onclick="closeChance()">
+        <img id="chanceImage" src="" alt="Chance" class="max-w-full max-h-full object-contain">
+    </div>
 
-                    <!-- Pilier 2: Cru/Cuit -->
-                    <button
-                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
-                        style="background-color: var(--pillar-2-color)" onclick="startPillarQuiz(1)">
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <img src="white-key.png" alt="key" class="w-20">
-                            <div class="text-sm font-bold text-white leading-tight">Séparez les aliments crus des
-                                aliments
-                                cuits</div>
-                        </div>
-                    </button>
+    <!-- Final Victory Screen -->
+    <div class="hidden fixed inset-0 bg-primary z-[300] flex items-center justify-center cursor-pointer"
+        id="finalVictoryScreen" onclick="resetGame()">
+        <img src="ecran-victoire.png" alt="Victoire Finale" class="w-full h-full object-cover">
+    </div>
 
-                    <!-- Pilier 3: Cuisson -->
-                    <button
-                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
-                        style="background-color: var(--pillar-3-color)" onclick="startPillarQuiz(2)">
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <img src="white-key.png" alt="key" class="w-20">
-                            <div class="text-sm font-bold text-white leading-tight">Faites bien cuire les aliments</div>
-                        </div>
-                    </button>
+    <!-- Settings Modal -->
+    <div id="settingsModal"
+        class="hidden fixed inset-0 bg-primary/90 backdrop-blur-md z-[400] flex items-center justify-center p-6">
+        <div
+            class="bg-secondary w-full max-w-xs rounded-xl border-2 border-secondary p-8 flex flex-col gap-6 relative shadow-2xl">
+            <button onclick="toggleSettingsModal()"
+                class="absolute top-4 right-4 text-primary hover:rotate-90 transition-transform">
+                <span class="material-icons text-3xl">close</span>
+            </button>
+            <h2 class="font-staatliches text-3xl text-primary text-center">PARAMÈTRES</h2>
 
-                    <!-- Pilier 4: Température -->
-                    <button
-                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
-                        style="background-color: var(--pillar-4-color)" onclick="startPillarQuiz(3)">
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <img src="white-key.png" alt="key" class="w-20">
-                            <div class="text-sm font-bold text-white leading-tight">Maintenez les aliments à bonne
-                                température</div>
-                        </div>
-                    </button>
+            <div class="flex flex-col gap-4">
+                <button onclick="toggleSound()" id="soundToggleBtn"
+                    class="bg-secondary border-2 border-primary p-4 rounded-xl flex items-center justify-between font-poppins font-bold text-primary active:scale-95 transition-transform">
+                    <span>SON DU JEU</span>
+                    <span class="material-icons" id="soundIcon">volume_up</span>
+                </button>
 
-                    <!-- Pilier 5: Sûreté -->
-                    <button
-                        class="bg-white p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 flex items-center justify-between"
-                        style="background-color: var(--pillar-5-color)" onclick="startPillarQuiz(4)">
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <img src="white-key.png" alt="key" class="w-20">
-                            <div class="text-sm font-bold text-white leading-tight">Utilisez de l'eau et des aliments
-                                sûrs
-                            </div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Bouton fermer avec bordure double -->
-            <div class="self-stretch rounded-lg outline outline-1 outline-offset-[-1px] outline-white">
-                <button
-                    class="w-full px-5 py-3 bg-white rounded-lg shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] outline outline-2 outline-offset-[-2px] outline-white flex justify-center items-center gap-2 cursor-pointer transition-all hover:bg-gray-50"
-                    onclick="closePillarsModal()">
-                    <div class="justify-start text-primary text-base font-semibold font-['Inter'] leading-6">Fermer
-                    </div>
+                <button onclick="confirmReset()"
+                    class="bg-secondary border-2 border-primary p-4 rounded-xl flex items-center justify-between font-poppins font-bold text-primary active:scale-95 transition-transform">
+                    <span>RECOMMENCER</span>
+                    <span class="material-icons">refresh</span>
                 </button>
             </div>
+
+            <button onclick="toggleSettingsModal()"
+                class="mt-4 bg-primary text-secondary font-poppins font-bold py-3 px-8 rounded-xl active:scale-95 transition-transform uppercase">
+                Fermer
+            </button>
         </div>
     </div>
+
 
     <script>
         // Données du jeu (VERSION COMPLÈTE)
 
+        // PROTECTION: Redirect to player config if no players configured
+        const storedPlayers = localStorage.getItem('players');
+        const storedMode = localStorage.getItem('gameMode');
+
+        if (!storedPlayers || !storedMode) {
+            // No players configured, redirect to mode selection
+            window.location.href = 'mode-selection.html';
+        }
+
         let gameData = null;
         // Audio management
         let currentAudio = null;
-        let backgroundMusic = null;
-        let isMusicMuted = false;
+        // backgroundMusic is now managed by music-controller.js
+        let isMusicMuted = localStorage.getItem('isMusicMuted') === 'true';
 
-        // Initialiser la musique de fond
-        function initBackgroundMusic() {
-            backgroundMusic = new Audio('audio/musique-audio.mp3');
-            backgroundMusic.loop = true;
-            backgroundMusic.volume = 0.15; // Volume à 15%
-        }
+        // Game mode management
+        let gameMode = 'cooperative'; // 'cooperative' or 'competitive'
+        let teamKeys = []; // For cooperative mode - shared keys
 
-        // Démarrer la musique de fond
-        function startBackgroundMusic() {
-            if (backgroundMusic && !isMusicMuted) {
-                backgroundMusic.play().catch(error => {
-                    console.log("Autoplay bloqué, cliquez sur le bouton musique");
-                });
-            }
-        }
+        // Get game mode from URL parameters
+        function getGameMode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const modeParam = urlParams.get('mode');
+            const storedMode = localStorage.getItem('gameMode');
 
-        // Basculer la musique de fond
-        function toggleBackgroundMusic() {
-            if (!backgroundMusic) {
-                initBackgroundMusic();
-            }
+            let rawMode = modeParam || storedMode || 'cooperative';
 
-            isMusicMuted = !isMusicMuted;
-            const musicBtn = document.getElementById('musicBtn');
-
-            if (isMusicMuted) {
-                backgroundMusic.pause();
-                musicBtn.textContent = '🔇'; // Icône mute
-                musicBtn.title = 'Activer la musique';
+            // Normalize
+            if (rawMode === 'competitive' || rawMode === 'competitif') {
+                gameMode = 'competitive';
             } else {
-                backgroundMusic.play();
-                musicBtn.textContent = '🔊'; // Icône son
-                musicBtn.title = 'Désactiver la musique';
+                gameMode = 'cooperative';
             }
-        } // Audio global pour gérer la lecture
+
+            // Force correct value in localStorage
+            localStorage.setItem('gameMode', gameMode);
+
+            console.log('Game mode normalized to:', gameMode);
+
+            // Update display
+            const modeDisplay = document.getElementById('gameModeDisplay');
+            if (modeDisplay) {
+                modeDisplay.textContent = gameMode === 'cooperative' ? 'MODE COOPÉRATIF' : 'MODE COMPÉTITIF';
+            }
+        }
+
+        // Initialize game mode on page load
+        getGameMode();
+
+        // Music is now managed by music-controller.js
+        // No need for local music initialization
 
         fetch("jeu-cartes.json")
             .then(response => {
@@ -645,6 +435,7 @@
             .then(data => {
                 console.log("JSON chargé :", data);
                 gameData = data; // variable globale
+                initGame(); // Initialiser le jeu après chargement des données
             })
             .catch(error => {
                 console.error("Erreur :", error);
@@ -679,62 +470,114 @@
         let currentPlayerIndex = 0;
         let playerQuestions = {};
         let playerKeys = {}; // Clés gagnées par chaque joueur
-        let adminMode = false; // Mode admin pour retirer des clés
 
-        function addPlayer() {
-            const container = document.getElementById("playerInputs");
-            const playerCount = container.children.length;
-
-            // Limiter à 4 joueurs maximum
-            if (playerCount >= 4) {
-                alert("Maximum 4 joueurs autorisés !");
-                return;
-            }
-
-            const div = document.createElement("div");
-            div.className = "mb-3";
-            div.innerHTML = `<input type="text" class="player-input w-full py-3 px-4 border border-[#D5D7DA] bg-white text-black text-base rounded-lg focus:outline-none focus:border-[#717680] placeholder:text-[#717680]" placeholder="Nom du joueur ${playerCount + 1}" maxlength="15" />`;
-            container.appendChild(div);
-
-            // Désactiver le bouton si on atteint 4 joueurs
-            if (playerCount + 1 >= 4) {
-                document.getElementById("addPlayerBtn").disabled = true;
-                document.getElementById("addPlayerBtn").classList.add("opacity-50", "cursor-not-allowed");
-            }
+        function saveGameState() {
+            localStorage.setItem('currentPlayerIndex', currentPlayerIndex);
+            localStorage.setItem('playerKeys', JSON.stringify(playerKeys));
+            localStorage.setItem('teamKeys', JSON.stringify(teamKeys));
         }
 
-        function startGame() {
-            const inputs = document.querySelectorAll(".player-input");
-            players = Array.from(inputs)
-                .map((input) => input.value.trim())
-                .filter((name) => name !== "");
+        function loadGameState() {
+            const savedIndex = localStorage.getItem('currentPlayerIndex');
+            if (savedIndex !== null) currentPlayerIndex = parseInt(savedIndex);
 
-            if (players.length < 2) {
-                alert("Le jeu nécessite au minimum 2 joueurs !");
+            const savedPlayerKeys = localStorage.getItem('playerKeys');
+            if (savedPlayerKeys) playerKeys = JSON.parse(savedPlayerKeys);
+
+            const savedTeamKeys = localStorage.getItem('teamKeys');
+            if (savedTeamKeys) teamKeys = JSON.parse(savedTeamKeys);
+        }
+
+        // LOAD PLAYERS: Initialize from localStorage
+        try {
+            const rawPlayers = localStorage.getItem('players');
+            if (rawPlayers) {
+                players = JSON.parse(rawPlayers);
+                console.log('Players loaded:', players);
+            }
+        } catch (e) {
+            console.error('Error parsing players from localStorage:', e);
+            window.location.href = 'mode-selection.html';
+        }
+
+        // Initialize player data structures and start game UI
+        function initGame() {
+            if (players.length === 0) {
+                console.error('No players found, redirecting...');
+                window.location.href = 'mode-selection.html';
                 return;
             }
 
-            if (players.length > 4) {
-                alert("Maximum 4 joueurs autorisés !");
-                return;
-            }
-
-            // Initialiser le stockage des questions et des clés pour chaque joueur
+            // Initialiser les structures de données si nécessaire
             players.forEach((player) => {
                 playerQuestions[player] = {};
                 for (let i = 0; i < 5; i++) {
                     playerQuestions[player][i] = [];
                 }
-                playerKeys[player] = []; // Tableau vide pour les clés gagnées
+                if (!playerKeys[player]) {
+                    playerKeys[player] = [];
+                }
             });
 
-            document.getElementById("playerSetup").style.display = "none";
-            document.getElementById("gameContainer").style.display = "block";
+            // Charger l'état sauvegardé
+            loadGameState();
+
+            // Initialize team keys for cooperative mode
+            if (gameMode === 'cooperative') {
+                if (!teamKeys || teamKeys.length === 0) {
+                    teamKeys = [];
+                }
+            }
+
+            // Hide configuration and show game
+            const playerSetup = document.getElementById("playerSetup");
+            if (playerSetup) playerSetup.style.display = "none";
+
+            const gameContainer = document.getElementById("gameContainer");
+            if (gameContainer) gameContainer.style.display = "block";
+
+            // CHECK QUIZ RESULT
+            const quizResultRaw = localStorage.getItem('quizResult');
+            if (quizResultRaw) {
+                const result = JSON.parse(quizResultRaw);
+                localStorage.removeItem('quizResult'); // Clear immediately
+
+                if (result.success) {
+                    const pillarIndex = result.pillarIndex;
+                    const currentPlayer = players[currentPlayerIndex];
+
+                    if (gameMode === 'cooperative') {
+                        if (!teamKeys.includes(pillarIndex)) {
+                            teamKeys.push(pillarIndex);
+                        }
+                        if (teamKeys.length >= 5) {
+                            showFinalVictory();
+                        }
+                    } else {
+                        if (!playerKeys[currentPlayer].includes(pillarIndex)) {
+                            playerKeys[currentPlayer].push(pillarIndex);
+                        }
+                        if (playerKeys[currentPlayer].length >= 5) {
+                            showFinalVictory();
+                        }
+                    }
+
+                    saveGameState(); // Sauvegarder après gain de clé
+
+                    // Show some visual feedback or message?
+                    console.log(`Félicitations ! Clé du pilier ${pillarIndex + 1} obtenue.`);
+
+                    // Move to next player after a success (only if not victory)
+                    if (!(gameMode === 'cooperative' && teamKeys.length >= 5) &&
+                        !(gameMode === 'competitive' && playerKeys[currentPlayer].length >= 5)) {
+                        nextPlayer();
+                    }
+                }
+            }
+
             updatePlayerDisplay();
 
-            // Initialiser et démarrer la musique de fond
-            initBackgroundMusic();
-            startBackgroundMusic();
+            // Music is automatically started by music-controller.js
         }
 
         // Update player display
@@ -753,8 +596,8 @@
         // Fonction pour passer au joueur suivant
         function nextPlayer() {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            saveGameState(); // Sauvegarder l'index du nouveau joueur
             updatePlayerDisplay();
-            updateNarrator(`C'est au tour de <span class="highlight">${players[currentPlayerIndex]}</span> de jouer !`);
         }
 
         // Track completed pillars
@@ -777,42 +620,7 @@
             }
         }
 
-        // Roll dice with fullscreen animation
-        let currentDiceValue = 5;
-        function rollDice() {
-            const diceAnim = document.getElementById("diceAnimation");
-            const diceDisplay = document.getElementById("diceDisplay");
-            const diceResultText = document.getElementById("diceResult");
-            const diceScore = document.getElementById("diceScore");
-
-            const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-
-            diceAnim.classList.add("active");
-            diceResultText.textContent = "";
-
-            let counter = 0;
-            const interval = setInterval(() => {
-                diceDisplay.textContent = diceFaces[Math.floor(Math.random() * 6)];
-                counter++;
-                if (counter > 10) {
-                    clearInterval(interval);
-                    const result = Math.floor(Math.random() * 6) + 1;
-                    currentDiceValue = result;
-                    diceDisplay.textContent = diceFaces[result - 1];
-                    diceResultText.textContent = `Vous avancez de ${result} case${result > 1 ? "s" : ""} !`;
-
-                    // Update dice score in player section
-                    diceScore.textContent = result;
-
-                    setTimeout(() => {
-                        diceAnim.classList.remove("active");
-                        updateNarrator(
-                            `🎲 Le dé donne <span class="highlight">${result}</span> ! ${players[currentPlayerIndex]} avance de ${result} case${result > 1 ? "s" : ""} !`
-                        );
-                    }, 1500);
-                }
-            }, 100);
-        }
+        // Dice functionality removed
 
         // Toggle pillars modal
         function togglePillars() {
@@ -832,10 +640,6 @@
             pillarsModal.style.display = "none";
         }
 
-        // Update narrator text
-        function updateNarrator(text) {
-            document.getElementById("narratorText").innerHTML = text;
-        }
 
         // Draw event card
         function drawCard(type) {
@@ -844,16 +648,46 @@
                 'surprise': 'Vous avez tiré une carte <strong>Surprise</strong> ! 🎁 Découvrez ce qui vous attend !',
                 'incident': 'Vous avez tiré une carte <strong>Incident</strong> ! ⚠️ Attention, danger !'
             };
-            updateNarrator(messages[type] || 'Carte tirée !');
         }
 
         // Initialisation
         window.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("playerSetup").style.display = "flex";
+            // Try to load players from localStorage
+            const storedPlayers = localStorage.getItem('players');
 
-            // Ajouter les event listeners pour les boutons
-            document.getElementById("addPlayerBtn").addEventListener("click", addPlayer);
-            document.getElementById("startGameBtn").addEventListener("click", startGame);
+            if (storedPlayers) {
+                // Players configured from player-config.html
+                players = JSON.parse(storedPlayers);
+
+                // Initialize player data structures
+                players.forEach((player) => {
+                    playerQuestions[player] = {};
+                    for (let i = 0; i < 5; i++) {
+                        playerQuestions[player][i] = [];
+                    }
+                    playerKeys[player] = [];
+                });
+
+                // Initialize team keys for cooperative mode
+                if (gameMode === 'cooperative') {
+                    teamKeys = [];
+                }
+
+                // Skip player setup and go directly to game
+                document.getElementById("playerSetup").style.display = "none";
+                document.getElementById("gameContainer").style.display = "block";
+                updatePlayerDisplay();
+
+
+                // Music is automatically started by music-controller.js
+            } else {
+                // Fallback: show player setup screen (old flow)
+                document.getElementById("playerSetup").style.display = "flex";
+
+                // Add event listeners for buttons
+                document.getElementById("addPlayerBtn").addEventListener("click", addPlayer);
+                document.getElementById("startGameBtn").addEventListener("click", startGame);
+            }
         });
 
 
@@ -882,17 +716,55 @@
             return shuffled.slice(0, 3); // Prendre les 3 premières après mélange
         }
 
-        function updateNarrator(text) {
-            document.getElementById("narratorText").innerHTML = text;
-        }
 
-
+        let pendingMalchanceAction = null; // Store action to execute after modal closes
+        let pendingChanceAction = null; // Store action to execute after modal closes
 
         function drawCard(type) {
+            // Handle chance cards with simple fullscreen display
+            if (type === "chance") {
+                const cards = gameData.chances;
+                const card = cards[Math.floor(Math.random() * cards.length)];
+
+                // Set only the image
+                document.getElementById("chanceImage").src = card.image;
+
+                // No audio for chance cards (only expert text)
+
+                // Store action to execute after modal closes
+                pendingChanceAction = card.action;
+
+                // Show fullscreen modal
+                document.getElementById("chanceScreen").style.display = "flex";
+                return;
+            }
+
+            // Handle malchance cards with simple fullscreen display
+            if (type === "malchance") {
+                const cards = gameData.malchance;
+                const card = cards[Math.floor(Math.random() * cards.length)];
+
+                // Set only the image
+                document.getElementById("malchanceImage").src = card.image;
+
+                // Play audio
+                if (card.audio) {
+                    playAudio(card.audio);
+                }
+
+                // Store action to execute after modal closes
+                pendingMalchanceAction = card.action;
+
+                // Show fullscreen modal
+                document.getElementById("malchanceScreen").style.display = "flex";
+                return;
+            }
+
+            // Map card types to data sources for other cards
             const cards =
                 type === "incident"
                     ? gameData.incidents
-                    : type === "security"
+                    : type === "security" || type === "chance"
                         ? gameData.security
                         : gameData.surprises;
             const card = cards[Math.floor(Math.random() * cards.length)];
@@ -900,6 +772,7 @@
             // Définir l'icône Material Icons selon le type
             const iconMap = {
                 'security': 'favorite',
+                'chance': 'favorite',
                 'surprise': 'help',
                 'incident': 'warning'
             };
@@ -907,6 +780,7 @@
             // Définir le titre du type selon le type
             const typeTitleMap = {
                 'security': 'CASE SÉCURITÉ',
+                'chance': 'CASE CHANCE',
                 'surprise': 'CASE SURPRISE',
                 'incident': 'CASE INCIDENT'
             };
@@ -930,6 +804,11 @@
                     outline: '#FF653E',
                     text: '#FF653E'
                 },
+                'chance': {
+                    bg: '#21AA74',
+                    outline: '#21AA74',
+                    text: '#21AA74'
+                },
                 'surprise': {
                     bg: '#7373F3',
                     outline: '#7373F3',
@@ -952,11 +831,11 @@
             // Appliquer les styles à la section EFFET
             effectSection.style.backgroundColor = colors.bg;
             effectSection.style.outlineColor = colors.bg;
-            effectSection.querySelector('.text-xl').style.color = 'white';
-            effectSection.querySelector('.text-sm').style.color = 'white';
+            effectSection.querySelector('.text-xl').style.color = 'secondary';
+            effectSection.querySelector('.text-sm').style.color = 'secondary';
 
             // Appliquer les styles à la section INFO OMS
-            infoSection.style.backgroundColor = 'white';
+            infoSection.style.backgroundColor = 'secondary';
             infoSection.style.outlineColor = colors.outline;
 
             // Appliquer la couleur au titre INFO OMS
@@ -979,7 +858,178 @@
             stopAudio(); // Arrêter l'audio
             const eventScreen = document.getElementById("eventScreen");
             eventScreen.style.display = "none";
-            eventScreen.classList.remove("security", "surprise", "incident");
+            eventScreen.classList.remove("security", "surprise", "incident", "chance", "malchance");
+        }
+
+        function closeMalchance() {
+            stopAudio(); // Arrêter l'audio
+            const malchanceScreen = document.getElementById("malchanceScreen");
+            malchanceScreen.style.display = "none";
+
+            // Execute the pending action after modal closes
+            if (pendingMalchanceAction) {
+                setTimeout(() => {
+                    executeMalchanceAction(pendingMalchanceAction);
+                    pendingMalchanceAction = null; // Reset
+                }, 100);
+            }
+        }
+
+        function closeChance() {
+            const chanceScreen = document.getElementById("chanceScreen");
+            chanceScreen.style.display = "none";
+
+            // Execute the pending action after modal closes
+            if (pendingChanceAction) {
+                setTimeout(() => {
+                    executeChanceAction(pendingChanceAction);
+                    pendingChanceAction = null; // Reset
+                }, 100);
+            }
+        }
+
+        // Execute malchance card actions
+        function executeMalchanceAction(action) {
+            const currentPlayer = players[currentPlayerIndex];
+
+            switch (action) {
+                case 'lose_item':
+                    // TODO: Implement item loss (when items system is added)
+                    break;
+
+                case 'skip_turn':
+                    // TODO: Implement turn skipping
+                    break;
+
+                case 'block_items':
+                    // TODO: Implement item blocking
+                    break;
+
+                case 'lose_last_key':
+                    // Remove last key from player with animation
+                    if (gameMode === 'cooperative') {
+                        if (teamKeys.length > 0) {
+                            const lostKey = teamKeys.pop();
+
+                            // Update progress bar IMMEDIATELY
+                            updateProgress();
+
+                            // Show notification after progress update
+                            showKeyLossNotification(`Clé ${lostKey + 1} perdue !`);
+                        } else {
+                            showKeyLossNotification("Aucune clé à perdre");
+                        }
+                    } else {
+                        if (playerKeys[currentPlayer] && playerKeys[currentPlayer].length > 0) {
+                            const lostKey = playerKeys[currentPlayer].pop();
+
+                            // Update progress bar IMMEDIATELY
+                            updatePlayerProgressBar();
+
+                            // Show notification after progress update
+                            showKeyLossNotification(`${currentPlayer} perd la Clé ${lostKey + 1} !`);
+                        } else {
+                            showKeyLossNotification(`${currentPlayer} n'a aucune clé à perdre`);
+                        }
+                    }
+                    break;
+
+                case 'swap_positions':
+                    // Swap all players with their left neighbor
+                    // TODO: Implement position swapping when board positions are added
+                    break;
+
+                default:
+                    console.log('Unknown action:', action);
+            }
+        }
+
+        // Execute chance card actions
+        function executeChanceAction(action) {
+            const currentPlayer = players[currentPlayerIndex];
+
+            switch (action) {
+                case 'cancel_one_error':
+                    // TODO: Implement error cancellation in quiz
+                    break;
+
+                case 'retry_quiz':
+                    // TODO: Implement quiz retry
+                    break;
+
+                case 'reroll_dice':
+                    // TODO: Implement dice reroll
+                    break;
+
+                case 'cancel_malchance':
+                    // TODO: Implement malchance cancellation
+                    break;
+
+                case 'teleport_to_player':
+                    // TODO: Implement teleportation
+                    break;
+
+                default:
+                    console.log('Unknown chance action:', action);
+            }
+        }
+
+        // Update cooperative mode progress bar
+        function updateProgress() {
+            const progressBoxes = document.getElementById('progressBoxes');
+            const keysProgressText = document.getElementById('keysProgress');
+
+            if (!progressBoxes || !keysProgressText) return;
+
+            // Update text
+            keysProgressText.textContent = `${teamKeys.length}/5 CLÉS`;
+
+            // Update visual boxes
+            const boxes = progressBoxes.children;
+            for (let i = 0; i < 5; i++) {
+                if (i < teamKeys.length) {
+                    // Key obtained - show pillar color
+                    const pillarIndex = teamKeys[i];
+                    boxes[i].className = `flex-1 h-3 rounded pillar-${pillarIndex + 1}`;
+                } else {
+                    // No key - gray
+                    boxes[i].className = 'flex-1 h-3 rounded bg-gray-300';
+                }
+            }
+        }
+
+        // Update competitive mode progress bar (placeholder - needs actual implementation)
+        function updatePlayerProgressBar() {
+            // TODO: Implement player-specific progress bar update for competitive mode
+            console.log('Player progress bar update needed for competitive mode');
+        }
+
+        // Show key loss notification with animation
+        function showKeyLossNotification(message) {
+            const notification = document.getElementById('keyLossNotification');
+            const textElement = document.getElementById('keyLossText');
+
+            textElement.textContent = message;
+            notification.classList.add('show');
+
+            // Remove the class after animation completes
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2500);
+        }
+
+        function closeMalchance() {
+            stopAudio(); // Arrêter l'audio
+            const malchanceScreen = document.getElementById("malchanceScreen");
+            malchanceScreen.style.display = "none";
+
+            // Execute the pending action after modal closes
+            if (pendingMalchanceAction) {
+                setTimeout(() => {
+                    executeMalchanceAction(pendingMalchanceAction);
+                    pendingMalchanceAction = null; // Reset
+                }, 100);
+            }
         }
 
         function startPillarQuiz(pillarIndex) {
@@ -993,7 +1043,7 @@
             selectedQuestions = selectRandomQuestions(pillarIndex);
 
             // Définir la couleur de bordure du quiz selon le pilier
-            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+            const pillarColors = ['#8BDFE7', '#8DC947', '#FFD04C', '#FFA1C8', '#FF6459'];
             const quizContainer = document.getElementById('quizContainer');
             quizContainer.style.borderColor = pillarColors[pillarIndex];
 
@@ -1036,7 +1086,7 @@
             const pillar = gameData.pillars[currentPillar];
             const question = selectedQuestions[currentQuestion]; // Utiliser les questions sélectionnées
             const isCorrect = selectedIndex === question.correct;
-            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+            const pillarColors = ['#8BDFE7', '#8DC947', '#FFD04C', '#FFA1C8', '#FF6459'];
 
             const options = document.querySelectorAll(".answer-option");
             options.forEach((option, index) => {
@@ -1044,7 +1094,7 @@
                     option.classList.add("correct");
                     option.style.backgroundColor = pillarColors[currentPillar];
                     option.style.borderColor = pillarColors[currentPillar];
-                    option.style.color = "white";
+                    option.style.color = "secondary";
                 }
                 else if (index === selectedIndex && !isCorrect) {
                     option.classList.add("incorrect");
@@ -1114,27 +1164,62 @@
             document.getElementById("quizScreen").classList.remove("active");
             document.getElementById("quizScreen").style.display = "none";
 
-            // Ajouter la clé au joueur actuel
             const currentPlayer = players[currentPlayerIndex];
-            if (!playerKeys[currentPlayer].includes(currentPillar)) {
-                playerKeys[currentPlayer].push(currentPillar);
-            }
-
-            // Mettre à jour la barre de progression avec les clés du joueur actuel
-            updatePlayerProgressBar();
-
             const pillar = gameData.pillars[currentPillar];
-            updateNarrator(
-                `🎉 CLÉ OBTENUE : <span class="highlight">${pillar.title}</span> ! La Reine est FURIEUSE ! 👑✨`
-            );
+
+            if (gameMode === 'cooperative') {
+                // In cooperative mode, add key to team keys
+                if (!teamKeys.includes(currentPillar)) {
+                    teamKeys.push(currentPillar);
+                }
+                // Also add to player for tracking who got which key
+                if (!playerKeys[currentPlayer].includes(currentPillar)) {
+                    playerKeys[currentPlayer].push(currentPillar);
+                }
+
+                updatePlayerProgressBar();
+
+                // Check for team victory
+                if (teamKeys.length >= 5) {
+                    showFinalVictory();
+                } else {
+                    nextPlayer();
+                }
+            } else {
+                // In competitive mode, add key only to current player
+                if (!playerKeys[currentPlayer].includes(currentPillar)) {
+                    playerKeys[currentPlayer].push(currentPillar);
+                }
+
+                updatePlayerProgressBar();
+
+                // Check for individual victory
+                if (playerKeys[currentPlayer].length >= 5) {
+                    showFinalVictory();
+                } else {
+                    nextPlayer();
+                }
+            }
         }
 
         // Fonction pour mettre à jour la barre de progression du joueur actuel
         function updatePlayerProgressBar() {
             const currentPlayer = players[currentPlayerIndex];
-            const playerWonKeys = playerKeys[currentPlayer] || [];
-            const pillarColors = ['#80D0E9', '#BBBC4C', '#F96E18', '#C1CFF4', '#FF453E'];
+            const pillarColors = ['#8BDFE7', '#8DC947', '#FFD04C', '#FFA1C8', '#FF6459'];
             const progressBoxes = document.querySelectorAll('#progressBoxes > div');
+
+            let displayKeys = [];
+            let keyCount = 0;
+
+            if (gameMode === 'cooperative') {
+                // In cooperative mode, show team keys
+                displayKeys = teamKeys || [];
+                keyCount = displayKeys.length;
+            } else {
+                // In competitive mode, show current player's keys
+                displayKeys = playerKeys[currentPlayer] || [];
+                keyCount = displayKeys.length;
+            }
 
             // Réinitialiser toutes les cases en gris
             progressBoxes.forEach(box => {
@@ -1143,52 +1228,21 @@
                 box.innerHTML = ''; // Vider le contenu
             });
 
-            // Colorer les cases selon les clés gagnées par le joueur actuel
-            playerWonKeys.forEach((pillarIndex, index) => {
+            // Colorer les cases selon les clés gagnées
+            displayKeys.forEach((pillarIndex, index) => {
                 if (progressBoxes[index]) {
                     progressBoxes[index].classList.remove('bg-gray-300');
                     progressBoxes[index].style.backgroundColor = pillarColors[pillarIndex];
 
-                    // Ajouter bouton de suppression en mode admin
-                    if (adminMode) {
-                        progressBoxes[index].style.position = 'relative';
-                        progressBoxes[index].innerHTML = `
-                            <button onclick="removeKey(${index})" 
-                                style="position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; 
-                                       background: white; border: 1px solid #dc3545; border-radius: 50%; 
-                                       color: #dc3545; font-size: 10px; line-height: 1; cursor: pointer; 
-                                       display: flex; align-items: center; justify-content: center; font-weight: bold;"
-                                title="Retirer cette clé">×</button>
-                        `;
-                    }
+                    // Ajouter bouton de suppression en mode admin (FONCTIONNALITÉ SUPPRIMÉE)
                 }
             });
 
             // Mettre à jour le compteur de clés
-            document.getElementById('keysProgress').textContent = `${playerWonKeys.length}/5 CLÉS`;
-        }
-
-        // Fonction pour activer/désactiver le mode admin
-        function toggleAdminMode() {
-            adminMode = !adminMode;
-            const adminBtn = document.getElementById('adminBtn');
-            if (adminMode) {
-                adminBtn.style.backgroundColor = '#fecaca';
-                adminBtn.style.borderColor = '#dc3545';
+            if (gameMode === 'cooperative') {
+                document.getElementById('keysProgress').textContent = `${keyCount}/5 CLÉS (ÉQUIPE)`;
             } else {
-                adminBtn.style.backgroundColor = '';
-                adminBtn.style.borderColor = '';
-            }
-            updatePlayerProgressBar();
-        }
-
-        // Fonction pour retirer une clé (mode admin)
-        function removeKey(keyIndex) {
-            if (!adminMode) return;
-            const currentPlayer = players[currentPlayerIndex];
-            if (playerKeys[currentPlayer] && playerKeys[currentPlayer][keyIndex] !== undefined) {
-                playerKeys[currentPlayer].splice(keyIndex, 1);
-                updatePlayerProgressBar();
+                document.getElementById('keysProgress').textContent = `${keyCount}/5 CLÉS (${currentPlayer})`;
             }
         }
 
@@ -1221,7 +1275,71 @@
             document.getElementById("quizScreen").classList.remove("active");
             document.getElementById("quizScreen").style.display = "none";
         }
+        // Toggle Settings Modal
+        function toggleSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Confirm game reset
+        function confirmReset() {
+            if (confirm("Voulez-vous vraiment recommencer la partie ? Toutes les clés et la progression seront perdues.")) {
+                localStorage.removeItem('currentPlayerIndex');
+                localStorage.removeItem('playerKeys');
+                localStorage.removeItem('teamKeys');
+                localStorage.removeItem('quizResult');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Toggle sound
+        function toggleSound() {
+            // Use global music controller
+            if (window.MusicController) {
+                window.MusicController.toggleMute();
+                isMusicMuted = window.MusicController.isMuted();
+            }
+            updateSoundUI();
+        }
+
+        function updateSoundUI() {
+            const soundIcon = document.getElementById('soundIcon');
+            const soundToggleBtn = document.getElementById('soundToggleBtn');
+            if (isMusicMuted) {
+                soundIcon.textContent = 'volume_off';
+                soundToggleBtn.classList.add('bg-gray-100');
+            } else {
+                soundIcon.textContent = 'volume_up';
+                soundToggleBtn.classList.remove('bg-gray-100');
+            }
+        }
+
+        // Initial sound state
+        const savedMute = localStorage.getItem('isMusicMuted');
+        if (savedMute !== null) {
+            isMusicMuted = (savedMute === 'true');
+        }
+
+        // Show final victory screen
+        function showFinalVictory() {
+            stopAudio();
+            // Pause music using global controller
+            if (window.MusicController) {
+                window.MusicController.pause();
+            }
+            document.getElementById('finalVictoryScreen').classList.remove('hidden');
+        }
+
+        // Reset game and go to home
+        function resetGame() {
+            // Optionnel: Clear localStorage if needed to restart fresh
+            // localStorage.clear(); 
+            window.location.href = 'index.html';
+        }
     </script>
+
+    <!-- Global Music Controller -->
+    <script src="music-controller.js"></script>
 </body>
 
 </html>

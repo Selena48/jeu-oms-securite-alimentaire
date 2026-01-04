@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choisissez votre mode - Panique dans la Cuisine</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#272727',
+                        secondary: '#F8F7F1',
+                        bacteria: '#423567',
+                        'pillar-1': '#8BDFE7',
+                        'pillar-2': '#8DC947',
+                        'pillar-3': '#FFD04C',
+                        'pillar-4': '#FFA1C8',
+                        'pillar-5': '#FF6459',
+                    },
+                    fontFamily: {
+                        'staatliches': ['Staatliches', 'cursive'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+
+    <!-- Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        body {
+            background-color: #F8F7F1;
+            background-image: url('bg-config.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .mode-card {
+            transition: all 0.3s ease;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .info-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden">
+
+    <!-- Main content -->
+    <div class="w-full max-w-md mx-auto relative z-10">
+
+
+        <!-- Logo OMS-->
+        <div class="mt-6">
+            <img src="logo-uxd2.png" alt="Logo OMS" class="mx-auto h-[12rem]">
+        </div>
+
+        <!-- Subtitle -->
+        <p class="text-center font-poppins text-lg font-semibold text-primary py-6">
+            Choisissez votre mode de jeu.
+        </p>
+
+        <!-- Mode cards container -->
+        <div class="flex flex-col gap-4">
+
+            <!-- Competitive Mode Card -->
+            <div class="mode-card bg-secondary rounded-xl border-2 border-primary overflow-hidden cursor-pointer"
+                onclick="selectMode('competitive')">
+                <div class="p-4 flex flex-col gap-4">
+                    <div class="flex items-start gap-2">
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <h2 class="font-staatliches text-2xl text-primary mb-2 leading-tight">
+                                MODE COMPETITIF
+                            </h2>
+                            <p class="font-semibold font-poppins text-primary">
+                                Chacun pour soi ! Récupérez vos 5 clés avant les autres.
+                            </p>
+                        </div>
+                        <!-- Icon -->
+                        <div class="flex-shrink-0">
+                            <img src="competitif.png" alt="Clé" class="w-12">
+                        </div>
+                    </div>
+                    <!-- Info badge -->
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="info-badge bg-primary flex items-center justify-center text-secondary font-poppins font-medium">
+                            <span class="material-symbols-rounded" style="font-size: 18px;">alarm</span>
+                            Pour une partie plus longue
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cooperative Mode Card -->
+            <div class="mode-card bg-primary rounded-xl border-2 border-primary overflow-hidden cursor-pointer"
+                onclick="selectMode('cooperative')">
+                <div class="p-4 flex flex-col gap-4">
+                    <div class="flex items-start gap-2">
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <h2 class="font-staatliches text-2xl text-secondary mb-2 leading-tight">
+                                MODE COOPERATIF
+                            </h2>
+                            <p class="font-semibold font-poppins text-secondary">
+                                Unissez vos forces ! Le groupe partage chaque clé récupérée. </p>
+                        </div>
+                        <!-- Icon -->
+                        <div class="flex-shrink-0">
+                            <img src="cooperatif.png" alt="Clé" class="w-12">
+                        </div>
+                    </div>
+                    <!-- Info badge -->
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="info-badge flex items-center justify-center bg-secondary text-primary font-poppins font-medium">
+                            <span class="material-symbols-rounded" style="font-size: 18px;">alarm</span>
+                            Pour une partie plus rapide
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <!-- Global Music Controller -->
+    <script src="music-controller.js"></script>
+
+    <script>
+        function selectMode(mode) {
+            // Store the selected mode in localStorage
+            localStorage.setItem('gameMode', mode);
+
+            // Redirect to player configuration with mode parameter
+            window.location.href = `player-config.html?mode=${mode}`;
+        }
+    </script>
+</body>
+
+</html>

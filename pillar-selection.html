@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz OMS - Sélection du pilier</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#272727',
+                        secondary: '#F8F7F1',
+                        bacteria: '#423567',
+                        'pillar-1': '#8BDFE7',
+                        'pillar-2': '#8DC947',
+                        'pillar-3': '#FFD04C',
+                        'pillar-4': '#FFA1C8',
+                        'pillar-5': '#FF6459',
+                    },
+                    fontFamily: {
+                        'staatliches': ['Staatliches', 'cursive'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #272727;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-8">
+
+    <!-- Main content -->
+    <div class="w-full max-w-sm mx-auto flex flex-col gap-4">
+        <!-- Header avec titre QUIZ OMS et icônes de clés -->
+        <div class="text-center">
+            <div class="flex items-center justify-center gap-2">
+                <h2 class="text-5xl font-staatliches text-secondary m-0">QUIZ OMS</h2>
+                <img src="cles-oms.png" alt="clés" class="w-20">
+            </div>
+        </div>
+
+        <!-- Contenu blanc -->
+        <div class="bg-secondary rounded-lg p-4 flex flex-col gap-3">
+
+            <!-- Pillars list verticale -->
+            <div class="flex flex-col gap-3">
+                <!-- Pilier 1: Propreté -->
+                <button class="p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 flex items-center gap-3"
+                    style="background-color: #8BDFE7" onclick="selectPillar(0)">
+                    <img src="OMS-1.png" alt="key" class=" h-16">
+                    <div class="flex-1 flex items-center gap-2">
+                        <div class="text-lg font-poppins font-semibold text-secondary text-left leading-tight">
+                            Prenez l'habitude de la propreté
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Pilier 2: Cru/Cuit -->
+                <button class="p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 flex items-center gap-3"
+                    style="background-color: #8DC947" onclick="selectPillar(1)">
+                    <img src="OMS-2.png" alt="key" class=" h-16">
+                    <div class="flex-1 flex items-center gap-2">
+                        <div class="text-lg font-poppins font-semibold text-secondary text-left leading-tight">
+                            Séparez les aliments crus des aliments cuits
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Pilier 3: Cuisson -->
+                <button class="p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 flex items-center gap-3"
+                    style="background-color: #FFD04C" onclick="selectPillar(2)">
+                    <img src="OMS-3.png" alt="key" class=" h-16">
+                    <div class="flex-1 flex items-center gap-2">
+                        <div class="text-lg font-poppins font-semibold text-secondary text-left leading-tight">
+                            Faites bien cuire les aliments
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Pilier 4: Température -->
+                <button class="p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 flex items-center gap-3"
+                    style="background-color: #FFA1C8" onclick="selectPillar(3)">
+                    <img src="OMS-4.png" alt="key" class=" h-16">
+                    <div class="flex-1 flex items-center gap-2">
+                        <div class="text-lg font-poppins font-semibold text-secondary text-left leading-tight">
+                            Maintenez les aliments à bonne température
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Pilier 5: Sûreté -->
+                <button class="p-4 cursor-pointer rounded-lg transition-all hover:opacity-90 flex items-center gap-3"
+                    style="background-color: #FF6459" onclick="selectPillar(4)">
+                    <img src="OMS-5.png" alt="key" class=" h-16">
+                    <div class="flex-1 flex items-center gap-2">
+                        <div class="text-lg font-poppins font-semibold text-secondary text-left leading-tight">
+                            Utilisez de l'eau et des produits sûrs
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bouton retour -->
+        <button
+            class="w-full py-3 px-5 font-poppins font-semibold bg-secondary text-primary cursor-pointer font-semibold text-base rounded-lg transition-all hover:opacity-90 border-2 border-primary"
+            onclick="goBack()">
+            Retour
+        </button>
+    </div>
+
+    <!-- Global Music Controller -->
+    <script src="music-controller.js"></script>
+
+    <script>
+        function selectPillar(pillarIndex) {
+            // Store selected pillar in sessionStorage
+            sessionStorage.setItem('selectedPillar', pillarIndex);
+            // Redirect to quiz page (to be created)
+            window.location.href = `quiz.html?pillar=${pillarIndex}`;
+        }
+
+        function goBack() {
+            window.location.href = 'jeu-wireframe.html';
+        }
+    </script>
+
+</body>
+
+</html>

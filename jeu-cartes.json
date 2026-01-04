@@ -1,646 +1,546 @@
 {
-    "incidents": [
+    "malchance": [
         {
-            "icon": "🧽",
-            "title": "ÉPONGE CONTAMINÉE",
-            "story": "CATASTROPHE ! Vous utilisez une éponge sale depuis <span class='danger'>PLUSIEURS JOURS</span> ! Cette éponge a tout nettoyé : le plan de travail, l'évier, les plaques... Elle est devenue un <span class='highlight'>nid à microbes</span> !",
-            "effect": "La bactérie avance de 2 cases et VOUS reculez d'1 case !",
-            "queenReaction": "PARFAIT ! <span class='danger'>MAGNIFIQUE</span> ! Une éponge humide contient jusqu'à <span class='highlight'>54 MILLIARDS</span> de bactéries par cm³ ! C'est un véritable laboratoire pour E. coli, Salmonella et mes amies Staphylococcus ! Vous me facilitez le travail ! 😈🦠",
-            "file": "audio/cartes-incident/eponge-contaminee.mp3",
-            "fact": "Les éponges de cuisine peuvent contenir plus de bactéries que le siège des toilettes ! L'OMS recommande de les désinfecter quotidiennement au micro-ondes (2 min) ou à l'eau bouillante, et de les remplacer CHAQUE SEMAINE !"
+            "name": "Salmonella",
+            "title": "Le Sabotage de Salmonella",
+            "image": "bacteria-salmonella.png",
+            "audio": "audio/cartes-incident/cuisson-insuffisante.mp3",
+            "queenReaction": "👑 \"Mes sbires Salmonella ont infiltré tes œufs et ta volaille ! Comme ils souillent tout ce qu'ils touchent, je t'arrache l'un de tes précieux outils. Choisis celui que tu sacrifies !\"",
+            "effect": "Le joueur perd un des objets positifs récupérés au choix.",
+            "fact": "La contamination croisée par le matériel oblige à se débarrasser d'un objet souillé pour éviter l'infection.",
+            "action": "lose_item"
         },
         {
-            "icon": "🚿",
-            "title": "RINÇAGE BÂCLÉ",
-            "story": "ERREUR CRITIQUE ! Vous rincez mal le matériel après le lavage ! Il reste des <span class='danger'>traces de savon</span> ET des <span class='danger'>particules alimentaires</span>. Un cocktail explosif !",
-            "effect": "Votre prochain passage sur une zone OMS ne compte pas !",
-            "queenReaction": "OUI ! Les résidus de détergent créent une pellicule où mes bactéries adorent se cacher ! <span class='highlight'>Listeria</span> peut survivre PLUSIEURS JOURS dans ces conditions ! Sans parler des réactions chimiques toxiques... Vous êtes un allié précieux ! 👑🦠",
-            "file": "audio/cartes-incident/rincage-bacle.mp3",
-            "fact": "Un rinçage incomplet laisse un biofilm invisible où les bactéries se multiplient 10 fois plus vite ! L'OMS exige un rinçage à l'eau courante pendant au moins 15 secondes pour éliminer tous les résidus."
+            "name": "Campylobacter",
+            "title": "L'Agonie de Campylobacter",
+            "image": "bacteria-campylobacter.png",
+            "audio": "audio/cartes-incident/chaine-du-froid-cassee.mp3",
+            "queenReaction": "👑 \"Une seule goutte de jus de poulet cru suffit à libérer Campylobacter ! Elle va tordre tes entrailles avec une telle violence que tu vas rester cloué au sol. Tu ne bougeras pas au prochain tour !\"",
+            "effect": "Le joueur passe son prochain tour à cause d'un cas d'intoxication alimentaire.",
+            "fact": "La dose infectieuse est si faible qu'elle provoque une incapacité totale immédiate du cuisinier.",
+            "action": "skip_turn"
         },
         {
-            "icon": "🧊",
-            "title": "CHAÎNE DU FROID CASSÉE",
-            "story": "DÉSASTRE TOTAL ! Vous laissez un produit sensible hors du frigo pendant <span class='danger'>TROP LONGTEMPS</span>... La température grimpe... <span class='danger'>15°C... 20°C... 25°C...</span> Vous êtes en pleine zone de danger !",
-            "effect": "Retournez à la case neutre la plus proche derrière vous !",
-            "file": "audio/cartes-incident/chaine-du-froid-cassee.mp3",
-            "queenReaction": "EXTRAORDINAIRE ! Entre 5°C et 60°C, c'est MON TERRITOIRE ! <span class='danger'>Nous doublons notre population toutes les 20 minutes</span> ! En 2 heures, UNE bactérie devient <span class='highlight'>4 MILLIONS</span> ! Salmonella, E. coli, Campylobacter... toute la famille se réjouit ! 🦠💀",
-            "fact": "La 'Zone de Danger' (5-60°C) est où les bactéries pathogènes se multiplient exponentiellement. La règle des 2 heures de l'OMS est absolue : au-delà, les toxines produites peuvent résister même à la cuisson !"
+            "name": "E. coli",
+            "title": "La Paralysie d'E. coli",
+            "image": "bacteria-e-coli.png",
+            "audio": "audio/cartes-incident/legumes-non-laves.mp3",
+            "queenReaction": "👑 \"E. coli s'est glissée dans ta viande mal cuite et libère ses toxines ! Ton plan de travail est maintenant un champ de poison : interdiction de toucher à tes ustensiles au prochain tour !\"",
+            "effect": "Vous ne pouvez utiliser aucun de vos objets positifs lors du prochain tour.",
+            "fact": "Les toxines produites par la bactérie rendent la manipulation de tout objet dangereuse tant que la zone n'est pas assainie.",
+            "action": "block_items"
         },
         {
-            "icon": "🥗",
-            "title": "LÉGUMES NON LAVÉS",
-            "story": "HORREUR ! Vous préparez une salade avec des légumes <span class='danger'>PAS LAVÉS</span> ! Ils viennent directement de leur emballage... couverts de <span class='highlight'>terre, pesticides et pathogènes</span> !",
-            "effect": "Vous passez votre prochain tour !",
-            "queenReaction": "JUBILATION TOTALE ! Les légumes crus sont couverts de <span class='highlight'>E. coli</span> provenant des engrais organiques ! Sans parler des parasites et des virus ! <span class='danger'>26% des intoxications</span> viennent des légumes mal lavés selon l'EFSA ! 🦠🥗",
-            "file": "audio/cartes-incident/legumes-non-laves.mp3",
-            "fact": "L'OMS recommande de laver TOUS les légumes sous l'eau courante pendant 30 secondes minimum, même ceux emballés 'prêts à l'emploi'."
+            "name": "Shigella",
+            "title": "Le Larcin de Shigella",
+            "image": "bacteria-shigella.png",
+            "audio": "audio/cartes-incident/eponge-contaminee.mp3",
+            "queenReaction": "👑 \"Shigella, ma voleuse d'élite, est passée par tes mains sales ! Elle détruit toute ton énergie et rend ton plat immangeable. Rends-moi cette clé, ton travail ne vaut plus rien !\"",
+            "effect": "Vous perdez la dernière clé obtenue.",
+            "fact": "La dysenterie sévère causée par ce microbe invalide la sécurité sanitaire de votre poste de travail, annulant votre succès.",
+            "action": "lose_last_key"
         },
         {
-            "icon": "🔥",
-            "title": "CUISSON INSUFFISANTE",
-            "story": "DANGER IMMINENT ! Votre viande hachée est <span class='danger'>ROSE À L'INTÉRIEUR</span> ! La surface est bien grillée mais le cœur n'a atteint que <span class='danger'>55°C</span>...",
-            "effect": "La bactérie avance de 3 cases vers vous !",
-            "queenReaction": "VICTOIRE ! À 55°C, E. coli O157:H7 SURVIT et prospère ! <span class='danger'>Cette souche a tué des enfants</span> en France ! 😈🔥",
-            "file": "audio/cartes-incident/cuisson-insuffisante.mp3",
-            "fact": "La viande hachée DOIT atteindre 70°C à cœur (réglementation UE)."
+            "name": "Norovirus",
+            "title": "Le Vortex du Norovirus",
+            "image": "bacteria-norovirus.png",
+            "audio": "audio/cartes-incident/rincage-bacle.mp3",
+            "queenReaction": "👑 \"Admirez la puissance de mon Norovirus ! Il saute de personne en personne comme une traînée de poudre. Toute la brigade est infectée : changez tous de poste immédiatement !\"",
+            "effect": "Tous les joueurs permutent de place avec leur voisin de gauche.",
+            "fact": "Sa résistance et sa propagation fulgurante en milieu clos créent un chaos qui désorganise toute la cuisine.",
+            "action": "swap_positions"
         }
     ],
-    "security": [
+    "chances": [
         {
-            "icon": "💡",
-            "title": "ORGANISATION PARFAITE",
-            "story": "BRAVO ! Vous organisez votre poste de travail selon les normes <span class='highlight'>HACCP</span> !",
-            "effect": "Ignorez le prochain événement négatif !",
-            "queenReaction": "IMPOSSIBLE ! Vous appliquez les 7 principes HACCP qui réduisent de <span class='danger'>90% les contaminations</span> ! 😤",
-            "file": "audio/cartes-securite/organisation-parfaite.mp3",
-            "fact": "Le système HACCP est reconnu mondialement."
+            "name": "Savon Doré",
+            "image": "carte-savon.png",
+            "expert": "Écoutez bien, je vous souffle la réponse ! Rappelez-vous : 80% des contaminations passent par les mains ! Lavez-les à l'eau potable et au savon avant de cuisiner et après avoir manipulé des aliments crus. C'est pourquoi ce savon vous permet de corriger une petite erreur sans conséquence.",
+            "effect": "Annule 1 erreur sur les 3 questions d'une case clé",
+            "action": "cancel_one_error"
         },
         {
-            "icon": "💧",
-            "title": "DÉSINFECTION COMPLÈTE",
-            "story": "EXCELLENT ! Nettoyage + rinçage + désinfection : protocole parfait !",
-            "effect": "Relancez le dé !",
-            "queenReaction": "NON ! Vous éliminez <span class='danger'>99,99% des pathogènes</span> ! 😡",
-            "file": "audio/cartes-securite/desinfection-complete.mp3",
-            "fact": "Seul le protocole complet est efficace."
+            "name": "Désinfectant Magique",
+            "image": "carte-desinfectant.png",
+            "expert": "Ne baissez pas les bras, je vous autorise un rattrapage ! L'OMS le dit : Nettoyer ne suffit pas toujours. L'OMS recommande de désinfecter les surfaces après contact avec des aliments crus, surtout la viande, le poisson et les œufs. Ce désinfectant vous autorise donc à recommencer l'épreuve proprement.",
+            "effect": "En cas d'échec sur une case clé, retentez immédiatement avec 3 nouvelles questions",
+            "action": "retry_quiz"
         },
         {
-            "icon": "🧊",
-            "title": "MAÎTRISE DU FROID",
-            "story": "PARFAIT ! Frigo à 4°C, produits rangés immédiatement.",
-            "effect": "Immunité pendant 2 tours !",
-            "queenReaction": "À 4°C ma multiplication est 10x plus lente ! 🥶",
-            "file": "audio/cartes-securite/maitrise-du-froid.mp3",
-            "fact": "La chaîne du froid est le point critique n°1."
+            "name": "Balance de précision",
+            "image": "carte-balance.png",
+            "expert": "L'OMS indique que de petites variations dans les paramètres de préparation peuvent suffire à rendre un aliment à risque. Cette balance vous permet de corriger une décision approximative.",
+            "effect": "Relancer le dé si vous n'êtes pas satisfait du résultat",
+            "action": "reroll_dice"
         },
         {
-            "icon": "🧤",
-            "title": "HYGIÈNE DES MAINS",
-            "story": "BIEN JOUÉ ! Lavage des mains pendant 30 secondes avec savon et séchage adapté.",
-            "effect": "Annulez un effet négatif en cours !",
-            "queenReaction": "QUOI ?! Vous éliminez mes alliées invisibles avant même qu'elles n'agissent ! 🤬",
-            "file": "audio/cartes-securite/hygiene-des-mains.mp3",
-            "fact": "Le lavage des mains réduit jusqu'à 80% des contaminations croisées."
+            "name": "Thermomètre",
+            "image": "carte-thermometre.png",
+            "expert": "Selon l'OMS, la \"zone de danger\" se situe entre 5 °C et 60 °C, où les bactéries se multiplient rapidement. Ce thermomètre vous permet de vous assurez que vous êtes à bonne température pour vous éviter une attaque de la reine.",
+            "effect": "Annule une Attaque Microbienne que vous rencontrez",
+            "action": "cancel_malchance"
         },
         {
-            "icon": "🏃‍♀️",
-            "title": "PROCÉDURE OPTIMISÉE",
-            "story": "PARFAIT ! Tout est fait dans le bon ordre.",
-            "effect": "Choisissez un joueur : il passe son prochain tour.",
-            "queenReaction": "TROP LENT ! Je le rattrape ! 😏",
-            "file": "audio/cartes-securite/procédure-optimisée.mp3",
-            "fact": "Une bonne organisation réduit le stress et les erreurs."
-        }
-    ],
-    "surprises": [
-        {
-            "icon": "🎤",
-            "title": "BRIEFING DU CHEF !",
-            "story": "Briefing surprise ! Une question pour tout le monde...",
-            "effect": "Le seul qui se trompe recule de 2 cases !",
-            "queenReaction": "La communication réduit 70% des erreurs ! 😈",
-            "file": "audio/cartes-surprise/briefing-du-chef.mp3",
-            "fact": "Le briefing quotidien est recommandé par l'OMS."
-        },
-        {
-            "icon": "🌀",
-            "title": "Quarantaine !",
-            "story": "La zone clé la plus proche du joueur est placée en quarantaine.",
-            "effect": "Zone bloquée pendant 2 tours pour tout le monde.",
-            "queenReaction": "Isolement = contrôle 😈",
-            "file": "audio/cartes-surprise/quarantaine.mp3",
-            "fact": "Limiter les déplacements réduit la propagation."
-        },
-        {
-            "icon": "😷",
-            "title": "Cas contact",
-            "story": "Suspicion de contamination.",
-            "effect": "Si le joueur est à 3 cases d'un autre joueur → retour au centre.",
-            "queenReaction": "La proximité est dangereuse 😏",
-            "file": "audio/cartes-surprise/cas-contact.mp3",
-            "fact": "La transmission croisée augmente avec la proximité."
-        },
-        {
-            "icon": "🐾",
-            "title": "Trace suspecte",
-            "story": "Microbe ou fausse alerte ?",
-            "effect": "Lancer le dé, si Pair → rejouer ; impair → la bactérie avance a une case de vous.",
-            "queenReaction": "Indice ou piège ? 🦠",
-            "file": "audio/cartes-surprise/trace-suspecte.mp3",
-            "fact": "Les contaminations indirectes sont fréquentes."
-        },
-        {
-            "icon": "🎛️",
-            "title": "Nouvelle règle HACCP",
-            "story": "Règle modifiée en urgence.",
-            "effect": "Tous les joueurs permutent avec leur voisin de gauche.",
-            "queenReaction": "Voyons qui s'adapte 😼",
-            "file": "audio/cartes-surprise/nouvelle-règle-haccp.mp3",
-            "fact": "Le plan HACCP doit rester adaptable."
-        },
-        {
-            "icon": "📦",
-            "title": "Livraison surprise",
-            "story": "Colis inattendu.",
-            "effect": "Tous avancent d'1 case.",
-            "queenReaction": "Inspection obligatoire 📦",
-            "file": "audio/cartes-surprise/livraison-surprise.mp3",
-            "fact": "Toute livraison doit être contrôlée."
-        },
-        {
-            "icon": "💥",
-            "title": "Incident matériel",
-            "story": "Un appareil tombe en panne.",
-            "effect": "Reculez de 2 cases.",
-            "queenReaction": "Le chaos me nourrit 💥",
-            "file": "audio/cartes-surprise/incident-materiel.mp3",
-            "fact": "Les pannes sont des risques critiques."
+            "name": "Le Chariot de Service",
+            "image": "carte-chariot.png",
+            "expert": "L'OMS recommande d'organiser les déplacements et les manipulations afin d'éviter les contaminations croisées. Ce chariot vous permet de vous déplacer sans risque inutile.",
+            "effect": "Téléporter vous sur la case du joueur que vous souhaitez",
+            "action": "teleport_to_player"
         }
     ],
     "pillars": [
         {
             "title": "Prenez l’habitude de la propreté",
-            "icon": "🧼",
+            "img": "cle-1-titre.png",
             "zone": "Zone Lavabo",
             "questions": [
                 {
-                    "q": "Après avoir découpé du poulet cru, que fais-tu AVANT de toucher autre chose ?",
+                    "q": "Après avoir lavé du poulet cru, quel est le meilleur moyen de nettoyer l’évier ?",
                     "a": [
-                        "Je m’essuie les mains sur un torchon",
-                        "Je me lave les mains à l’eau et au savon",
-                        "Je rince vite fait à l’eau"
+                        "Le rincer à l’eau chaude et le sécher avec un torchon",
+                        "Le frotter avec du savon, puis le rincer et désinfecter avec de l’eau de Javel diluée",
+                        "Le laisser tremper avec du vinaigre blanc pendant 10 minutes"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Le savon nettoie, mais le vinaigre ne tue pas toutes les bactéries et le torchon peut les répandre ."
                 },
                 {
-                    "q": "Pourquoi éviter d’utiliser un torchon pour se sécher les mains après lavage ?",
+                    "q": "Pourquoi ne faut-il pas utiliser la même éponge pour laver la vaisselle et nettoyer l’évier ?",
                     "a": [
-                        "Il peut recontaminer les mains",
-                        "Il ne sèche pas assez",
-                        "Il abîme la peau"
+                        "L’éponge s’use plus vite",
+                        "L’évier peut contenir des résidus de produits chimiques",
+                        "L’éponge peut transférer des bactéries de l’évier à la vaisselle"
                     ],
-                    "correct": 0
+                    "correct": 2,
+                    "expert": "Le risque majeur est le transfert de micro-organismes dangereux ."
                 },
                 {
-                    "q": "Quelle est la meilleure façon de nettoyer l’évier après avoir manipulé de la viande crue ?",
+                    "q": "Quel est le meilleur moyen de sécher ses mains après les avoir lavées ?",
                     "a": [
-                        "Eau chaude seule",
-                        "Savon puis désinfection",
-                        "Vinaigre blanc"
+                        "Avec du papier absorbant à usage unique",
+                        "Avec un torchon en tissu",
+                        "En les agitant dans l’air"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "Les torchons peuvent être contaminés et l’air ne sèche pas assez vite pour éviter les transferts de microbes ."
                 },
                 {
-                    "q": "Pourquoi ne faut-il pas utiliser la même éponge pour la vaisselle et l’évier ?",
+                    "q": "Quel produit est le plus efficace pour désinfecter un évier après avoir préparé du poisson cru ?",
                     "a": [
-                        "Elle s’use plus vite",
-                        "Elle mélange les odeurs",
-                        "Elle transfère des bactéries"
+                        "Du savon liquide",
+                        "De l’eau de Javel diluée",
+                        "Du bicarbonate de soude"
                     ],
-                    "correct": 2
+                    "correct": 1,
+                    "expert": "Le savon nettoie mais ne désinfecte pas, et le bicarbonate est inefficace contre les bactéries ."
                 },
                 {
-                    "q": "Après avoir touché des œufs crus, pourquoi faut-il se laver les mains ?",
+                    "q": "Après avoir touché des œufs, pourquoi faut-il se laver les mains ?",
                     "a": [
-                        "Pour enlever les saletés",
-                        "À cause du risque de salmonelle",
-                        "Pour éviter l’odeur"
+                        "Pour enlever les traces de coquille",
+                        "Pour éviter de transférer des bactéries comme Salmonella",
+                        "Pour éviter que les œufs ne collent aux doigts"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Les œufs peuvent porter des bactéries comme Salmonella, même sur leur coquille ."
                 },
                 {
-                    "q": "Quand faut-il absolument se laver les mains en cuisine ?",
+                    "q": "Quelle partie de la cuisine est la plus souvent négligée mais doit pourtant être désinfectée ?",
                     "a": [
-                        "Après avoir touché son téléphone",
-                        "Après avoir manipulé des aliments crus",
-                        "Les deux"
+                        "La poignée du frigo",
+                        "Le plan de travail",
+                        "L'évier"
                     ],
-                    "correct": 2
+                    "correct": 0,
+                    "expert": "Les poignées sont un point de transfert majeur de microbes ."
                 },
                 {
-                    "q": "Pourquoi les mains humides sont-elles un problème ?",
+                    "q": "Quel est le temps minimal recommandé pour un lavage de mains réellement efficace ?",
                     "a": [
-                        "Elles glissent",
-                        "Les bactéries s’y transfèrent plus facilement",
-                        "Elles refroidissent"
+                        "5 secondes",
+                        "20 secondes",
+                        "30 secondes"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Au moins 20 secondes sont nécessaires pour décoller efficacement les graisses et les micro-organismes ."
                 },
                 {
-                    "q": "Une éponge qui sent mauvais est-elle encore utilisable ?",
+                    "q": "Quelle est la différence cruciale entre le 'nettoyage' et la 'désinfection' ?",
                     "a": [
-                        "Oui si on la rince",
-                        "Oui si elle sèche",
-                        "Non"
+                        "Il n'y a aucune différence",
+                        "Le nettoyage tue les micro-organismes invisibles et la désinfectation renforce la protection",
+                        "Le nettoyage élimine les débris visibles, la désinfection tue les micro-organismes"
                     ],
-                    "correct": 2
+                    "correct": 2,
+                    "expert": "Le nettoyage seul ne tue pas les microbes invisibles , ."
                 },
                 {
-                    "q": "À quelle fréquence faut-il changer ou désinfecter une éponge ?",
+                    "q": "Quel est l'endroit le plus souvent négligé lors d'un lavage des mains rapide ?",
                     "a": [
-                        "Tous les mois",
-                        "Une fois par semaine minimum",
-                        "Jamais"
+                        "La paume des mains et le dos de la main",
+                        "Le bout des doigts et les espaces entre les doigts",
+                        "Le dos de la main et les bouts des doigts"
                     ],
-                    "correct": 1
-                },
-                {
-                    "q": "Pourquoi nettoyer régulièrement les poignées et interrupteurs de la cuisine ?",
-                    "a": [
-                        "Ils sont souvent touchés avec des mains sales",
-                        "Ils prennent la poussière",
-                        "Pour l’esthétique"
-                    ],
-                    "correct": 0
+                    "correct": 1,
+                    "expert": "On a tendance à frotter uniquement les paumes et le dos de la main lors d'un lavage rapide ."
                 }
             ]
         },
         {
             "title": "Séparez les aliments crus des aliments cuits",
-            "icon": "🔪",
+            "img": "cle-2-titre.png",
             "zone": "Zone Planche à Découper",
             "questions": [
                 {
-                    "q": "Pourquoi ne faut-il pas couper des légumes après du poulet cru sur la même planche ?",
+                    "q": "Pourquoi utiliser des planches à découper différentes pour la viande et les légumes ?",
                     "a": [
-                        "Le goût peut changer",
-                        "Risque de contamination croisée",
-                        "Les légumes glissent"
+                        "Pour éviter de mélanger les goûts",
+                        "Pour faciliter le rangement",
+                        "Pour éviter la contamination croisée"
                     ],
-                    "correct": 1
+                    "correct": 2,
+                    "expert": "Les aliments crus peuvent contenir des micro-organismes dangereux qui risquent de contaminer les autres aliments , ."
                 },
                 {
-                    "q": "Quel est le bon réflexe après avoir utilisé une planche pour de la viande crue ?",
+                    "q": "Après avoir coupé du poulet cru, quelle action est suffisante pour utiliser la même planche avec des tomates ?",
                     "a": [
-                        "L’essuyer",
-                        "La laver à l’eau chaude et au savon",
-                        "La retourner"
+                        "La rincer abondamment à l’eau chaude",
+                        "La laver avec de l’eau chaude et du produit vaisselle",
+                        "L’essuyer soigneusement avec un torchon propre"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Un simple rinçage ou un coup de chiffon ne suffisent pas à éliminer les micro-organismes ."
                 },
                 {
-                    "q": "Pourquoi utiliser plusieurs planches à découper ?",
+                    "q": "Pourquoi est-il déconseillé d’utiliser une planche à découper en bois pour la viande crue ?",
                     "a": [
-                        "Pour gagner du temps",
-                        "Pour éviter le transfert de bactéries",
-                        "Pour le rangement"
+                        "Parce que le bois se tâche facilement",
+                        "Parce que le bois peut retenir des résidus difficiles à enlever",
+                        "Parce que le bois est trop lourd"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Le bois est poreux et peut retenir des jus et résidus favorisant la prolifération bactérienne , ."
                 },
                 {
-                    "q": "Quelle matière est la plus adaptée pour la viande crue ?",
+                    "q": "Où recommande l'OMS de placer la viande crue dans le frigo et pourquoi ?",
                     "a": [
-                        "Bois",
-                        "Plastique",
-                        "Verre"
+                        "Au niveau le plus haut",
+                        "Au milieu du frigo",
+                        "Au niveau le plus bas"
                     ],
-                    "correct": 1
+                    "correct": 2,
+                    "expert": "Cela évite que ses jus ne coulent sur les aliments cuits ou prêts à consommer ."
                 },
                 {
-                    "q": "Peut-on poser un aliment cuit dans une assiette ayant contenu du cru ?",
+                    "q": "Que signifie exactement le terme de « contamination croisée » ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement si c’est chaud"
+                        "Le transfert de micro-organismes d'un aliment cru à un aliment cuit",
+                        "Le mélange de différents types de viandes",
+                        "L'exposition à deux sources de contamination simultanément"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "Il s'agit spécifiquement du transfert vers un aliment cuit ou prêt à être consommé ."
                 },
                 {
-                    "q": "Pourquoi faut-il séparer cru et cuit dans le frigo ?",
+                    "q": "Pourquoi est-il insuffisant d'essuyer un couteau ayant servi à la viande crue avant de couper des légumes ?",
                     "a": [
-                        "Pour l’organisation",
-                        "Pour éviter que les jus contaminent",
-                        "Pour gagner de la place"
+                        "Un léger contact suffit pour transférer des micro-organismes",
+                        "L'acier absorbe les toxines chimiques",
+                        "Cela accélère l'oxydation"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "Le contact direct suffit au transfert ; l'acier n'absorbe pas de toxines ."
                 },
                 {
-                    "q": "Où placer la viande crue dans le frigo ?",
-                    "a": [
-                        "En haut",
-                        "En bas",
-                        "Dans la porte"
-                    ],
-                    "correct": 1
-                },
-                {
-                    "q": "Une planche très rayée est-elle encore sûre ?",
-                    "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement pour légumes"
-                    ],
-                    "correct": 1
-                },
-                {
-                    "q": "Peut-on utiliser le même couteau pour cru et cuit sans le laver ?",
-                    "a": [
-                        "Oui si on essuie",
-                        "Non",
-                        "Oui si on attend"
-                    ],
-                    "correct": 1
-                },
-                {
-                    "q": "Pourquoi la contamination croisée est-elle dangereuse ?",
+                    "q": "Pourquoi la contamination croisée est-elle particulièrement risquée avec les aliments crus ?",
                     "a": [
                         "Les bactéries sont invisibles",
-                        "Elles changent le goût",
-                        "Elles disparaissent à l’air"
+                        "Ces aliments ne seront pas recuits ensuite",
+                        "Ils se conservent moins longtemps"
                     ],
-                    "correct": 0
+                    "correct": 1,
+                    "expert": "Le danger vient du fait que les aliments ne subiront pas de cuisson ultérieure pour détruire les microbes ."
+                },
+                {
+                    "q": "À quel moment précis doit commencer la séparation entre la viande crue et les autres produits ?",
+                    "a": [
+                        "Au moment de la découpe",
+                        "Dès l'étape des achats",
+                        "Lors du rangement au réfrigérateur"
+                    ],
+                    "correct": 1,
+                    "expert": "La contamination peut déjà avoir lieu pendant le transport ou le stockage temporaire ."
                 }
             ]
         },
         {
             "title": "Faites bien cuire les aliments",
-            "icon": "🔥",
+            "img": "cle-3-titre.png",
             "zone": "Zone Plaques de Cuisson",
             "questions": [
                 {
-                    "q": "Pourquoi un steak haché doit-il être bien cuit ?",
-                    "a": [
-                        "Il est plus gras",
-                        "Les bactéries sont à l’intérieur",
-                        "Il est plus dur"
-                    ],
-                    "correct": 1
-                },
-                {
-                    "q": "Une viande dorée à l’extérieur est-elle forcément cuite à l’intérieur ?",
-                    "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement au barbecue"
-                    ],
-                    "correct": 1
-                },
-                {
-                    "q": "Quelle est la température minimale de sécurité pour la viande hachée ?",
+                    "q": "À quelle température minimale doit être cuit un steak haché ?",
                     "a": [
                         "55°C",
                         "63°C",
                         "70°C"
                     ],
-                    "correct": 2
+                    "correct": 2,
+                    "expert": "70°C est nécessaire pour le haché, alors que 63°C suffit pour un steak entier ."
                 },
                 {
-                    "q": "Pourquoi le riz peut-il être dangereux s’il est mal conservé ?",
+                    "q": "Peut-on cuire des légumes surgelés directement à la poêle sans décongélation ?",
                     "a": [
-                        "Il sèche",
-                        "Il développe des toxines",
-                        "Il fermente"
+                        "Oui, mais il faut les cuire plus longtemps",
+                        "Non, il faut toujours les décongeler",
+                        "Oui, seulement s'ils sont précuits"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "C'est possible à condition d'adapter le temps de cuisson ."
                 },
                 {
-                    "q": "Peut-on réchauffer un plat plusieurs fois ?",
+                    "q": "Pourquoi une viande peut-elle être “grillée” à l’extérieur mais dangereuse à l’intérieur ?",
                     "a": [
-                        "Oui sans risque",
-                        "Oui mais déconseillé",
-                        "Non jamais"
+                        "Les bactéries se déplacent vers l'intérieur",
+                        "La chaleur ne pénètre pas uniformément au cœur",
+                        "Le grill ne tue les bactéries qu'en surface"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Un feu trop vif peut griller l'extérieur avant que le cœur n'atteigne les 70°C requis ."
                 },
                 {
-                    "q": "Le micro-ondes chauffe :",
+                    "q": "Quel micro-organisme survit à la cuisson du riz ?",
                     "a": [
-                        "De façon uniforme",
-                        "De façon inégale",
-                        "Toujours à 100°C"
+                        "E. coli",
+                        "Salmonella",
+                        "Bacillus cereus"
                     ],
-                    "correct": 1
+                    "correct": 2,
+                    "expert": "Contrairement aux autres, Bacillus cereus est lié au riz mal conservé et peut résister ."
                 },
                 {
-                    "q": "Pourquoi faut-il bien remuer un plat au micro-ondes ?",
+                    "q": "Peut-on réchauffer un plat plus d’une fois ?",
                     "a": [
-                        "Pour le goût",
-                        "Pour chauffer partout",
-                        "Pour aller plus vite"
+                        "Oui, autant qu'on veut",
+                        "Oui, mais c’est déconseillé",
+                        "Non, c'est toujours dangereux"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Chaque cycle de refroidissement/réchauffement augmente le risque en repassant par la zone de danger (5°C-60°C) ."
                 },
                 {
-                    "q": "Une viande encore froide au centre est-elle sûre ?",
+                    "q": "À quelle température les bactéries commencent-elles à être détruites rapidement ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement si elle est rouge"
+                        "40°C",
+                        "60°C",
+                        "95°C"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "La zone de sécurité commence autour de 60–65 °C ."
                 },
                 {
-                    "q": "Pourquoi certaines bactéries survivent à la cuisson ?",
+                    "q": "Pourquoi les viandes hachées sont-elles plus à risque ?",
                     "a": [
-                        "Elles sont rapides",
-                        "Elles forment des spores",
-                        "Elles aiment la chaleur"
+                        "Moins de régulations",
+                        "Les bactéries sont réparties dans toute la viande",
+                        "Elles cuisent plus lentement"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Le processus de hachage répartit les bactéries à l'intérieur de la masse ."
                 },
                 {
-                    "q": "Quand un plat est-il considéré comme correctement réchauffé ?",
+                    "q": "Un aliment est considéré comme “bien cuit” selon l’OMS lorsque :",
                     "a": [
-                        "Quand il fume",
-                        "Quand il est chaud partout",
-                        "Quand il bout"
+                        "Il atteint une température élevée à l’intérieur",
+                        "Sa surface est chaude et sèche",
+                        "Il a été exposé longtemps à la chaleur"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "La sécurité dépend exclusivement de la température atteinte à cœur ."
                 }
             ]
         },
         {
             "title": "Maintenez les aliments à bonne température",
-            "icon": "❄️",
+            "img": "cle-4-titre.png",
             "zone": "Zone Frigo",
             "questions": [
                 {
-                    "q": "Quelle est la température idéale d’un frigo ?",
+                    "q": "À quelle température doit être réglé un frigo pour une conservation optimale ?",
                     "a": [
                         "0°C",
                         "4°C",
                         "8°C"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "4°C freine efficacement la croissance de la plupart des micro-organismes , ."
                 },
                 {
-                    "q": "Pourquoi éviter de laisser un plat hors du frigo trop longtemps ?",
+                    "q": "Pourquoi faut-il éviter de surcharger un frigo ?",
                     "a": [
-                        "Il sèche",
-                        "Les bactéries se multiplient",
-                        "Il refroidit"
+                        "L’air froid ne circule plus correctement",
+                        "Ça consomme plus d’électricité",
+                        "Les aliments risquent de geler"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "Une mauvaise circulation crée des zones de chaleur favorables aux bactéries ."
                 },
                 {
-                    "q": "À partir de combien de temps un plat devient risqué à température ambiante ?",
+                    "q": "Où doit-on placer la viande crue dans le frigo ?",
                     "a": [
-                        "30 minutes",
-                        "2 heures",
-                        "5 heures"
+                        "Sur l’étagère du haut",
+                        "Sur l’étagère du bas",
+                        "Dans la porte"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Cela empêche les jus de couler sur d'autres aliments ."
                 },
                 {
-                    "q": "Pourquoi ne pas surcharger un frigo ?",
+                    "q": "Peut-on laisser un plat plus de 2h à température ambiante ?",
                     "a": [
-                        "Il consomme plus",
-                        "L’air froid circule mal",
-                        "Il fait du bruit"
+                        "Oui, si on le couvre",
+                        "Non, risque de multiplication bactérienne",
+                        "Oui, si on le réchauffe après"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "À température ambiante, les micro-organismes se multiplient très rapidement ."
                 },
                 {
-                    "q": "Où se situe la zone la plus froide du frigo ?",
+                    "q": "Peut-on recongeler un aliment déjà décongelé ?",
                     "a": [
-                        "En haut",
-                        "Au milieu",
-                        "En bas"
+                        "Oui, s’il a été cuit entre-temps",
+                        "Non, jamais",
+                        "Oui, si on le fait rapidement"
                     ],
-                    "correct": 2
+                    "correct": 0,
+                    "expert": "Une cuisson complète à 70°C à cœur détruit les micro-organismes multipliés pendant la décongélation ."
                 },
                 {
-                    "q": "Peut-on recongeler un aliment décongelé cru ?",
+                    "q": "Quelle température correspond à la 'zone de danger' ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Oui si rapide"
+                        "0–4 °C",
+                        "5–60 °C",
+                        "70–100 °C"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "C'est la plage où la croissance est la plus rapide ."
                 },
                 {
-                    "q": "Peut-on recongeler un aliment décongelé puis cuit ?",
+                    "q": "Quelle toxine ne peut pas être détruite par la cuisson ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Jamais"
+                        "Celles de Bacillus cereus",
+                        "Celles de Salmonella",
+                        "Celles d’E. coli"
                     ],
-                    "correct": 0
+                    "correct": 0,
+                    "expert": "Bacillus cereus produit des toxines qui résistent à la chaleur même après une nouvelle cuisson ."
                 },
                 {
-                    "q": "Pourquoi la porte du frigo n’est-elle pas idéale pour la viande ?",
+                    "q": "Pourquoi la porte du frigo est-elle déconseillée pour les aliments sensibles ?",
                     "a": [
-                        "Elle est trop petite",
-                        "La température varie",
-                        "Elle sent mauvais"
+                        "La chaleur circule mal",
+                        "Zone exposée aux variations de température",
+                        "L’humidité y est trop élevée"
                     ],
-                    "correct": 1
-                },
-                {
-                    "q": "Un frigo mal réglé peut-il être dangereux ?",
-                    "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement l’été"
-                    ],
-                    "correct": 0
-                },
-                {
-                    "q": "Pourquoi vérifier régulièrement la température du frigo ?",
-                    "a": [
-                        "Pour économiser",
-                        "Pour éviter les risques sanitaires",
-                        "Pour le confort"
-                    ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "L'ouverture de la porte fait entrer l'air chaud, créant des variations propices au réveil des bactéries ."
                 }
             ]
         },
         {
             "title": "Utilisez de l’eau et des aliments sûrs",
-            "icon": "🗑️",
+            "img": "cle-5-titre.png",
             "zone": "Zone Poubelle",
             "questions": [
                 {
-                    "q": "Pourquoi jeter rapidement les emballages de viande ?",
+                    "q": "Quel signe extérieur sur une conserve impose son élimination ?",
                     "a": [
-                        "Pour les odeurs",
-                        "Pour éviter les bactéries",
-                        "Pour faire de la place"
+                        "Étiquette déchirée",
+                        "Boîte bombée ou oxydée",
+                        "Date de fabrication > 6 mois"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Cela indique un développement potentiel de bactéries ."
                 },
                 {
-                    "q": "Pourquoi éviter de jeter des liquides dans la poubelle ?",
+                    "q": "Face à un fruit présentant une zone légèrement abîmée, que faire ?",
                     "a": [
-                        "Ça pèse lourd",
-                        "Ça fuit et contamine",
-                        "Ça prend du temps"
+                        "Jeter le fruit entier",
+                        "Le rincer à l'eau chaude",
+                        "Couper et jeter la zone abîmée"
                     ],
-                    "correct": 1
+                    "correct": 2,
+                    "expert": "Le risque est limité à la zone endommagée s'il n'y a pas de moisissure ."
                 },
                 {
-                    "q": "Un aliment qui sent mauvais est-il consommable ?",
+                    "q": "Si une petite partie d’un aliment est moisie, faut-il tout jeter ?",
                     "a": [
-                        "Oui après cuisson",
-                        "Non",
-                        "Oui s’il est récent"
+                        "Oui, car des toxines invisibles peuvent avoir pénétré",
+                        "Non, couper la partie visible suffit",
+                        "Non, si on le fait bouillir"
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "Certaines moisissures produisent des toxines invisibles qui se diffusent en profondeur ."
                 },
                 {
-                    "q": "Pourquoi respecter les dates de consommation ?",
+                    "q": "Quelle mention indique une limite de sécurité impérative ?",
                     "a": [
-                        "Pour le goût",
-                        "Pour la sécurité sanitaire",
-                        "Pour l’esthétique"
+                        "À consommer jusqu’au...",
+                        "À consommer de préférence avant le...",
+                        "Pour une dégustation optimale..."
                     ],
-                    "correct": 1
+                    "correct": 0,
+                    "expert": "La DLC (À consommer jusqu’au) doit être respectée pour éviter les intoxications ."
                 },
                 {
-                    "q": "Peut-on consommer une conserve bombée ?",
+                    "q": "Que faire si la DDM (Date de Durabilité Minimale) est dépassée sur du riz ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement si cuite"
+                        "Le jeter par précaution",
+                        "Vérifier l'aspect et l'odeur",
+                        "Le cuire à plus de 90°C"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "La DDM concerne la qualité (goût, texture) et non la sécurité immédiate ."
                 },
                 {
-                    "q": "Pourquoi sortir les poubelles plus souvent en été ?",
+                    "q": "Que devient la DLC d'un jambon une fois le paquet ouvert ?",
                     "a": [
-                        "Odeurs",
-                        "Développement bactérien plus rapide",
-                        "Insectes"
+                        "Elle reste valable",
+                        "Elle devient inutile, consommer sous 48h",
+                        "Elle est prolongée en boîte hermétique"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "L'ouverture expose l'aliment aux micro-organismes de l'air et des mains ."
                 },
                 {
-                    "q": "Pourquoi emballer les restes avant de les jeter ?",
+                    "q": "Pourquoi l'eau des rivières est-elle 'non sûre' ?",
                     "a": [
-                        "Pour le tri",
-                        "Pour éviter la contamination",
-                        "Pour le poids"
+                        "Trop de calcaire",
+                        "Contient des parasites et pathogènes (typhoïde)",
+                        "Manque de minéraux"
                     ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "Elle peut causer la dysenterie ou la typhoïde malgré son aspect , ."
                 },
                 {
-                    "q": "Une conserve doit-elle être lavée avant recyclage ?",
+                    "q": "Que signifie 'Aliment sûr' selon l'OMS ?",
                     "a": [
-                        "Oui",
-                        "Non",
-                        "Seulement viande"
+                        "Exempt de dangers à des niveaux nocifs",
+                        "Aucune bactérie présente",
+                        "Aucun risque à long terme"
                     ],
-                    "correct": 0
+                    "correct": 0,
+                    "expert": "Un aliment sûr peut contenir des micro-organismes non nocifs ."
                 },
                 {
-                    "q": "Pourquoi l’eau potable est essentielle en cuisine ?",
+                    "q": "Pourquoi choisir du lait pasteurisé plutôt que du lait cru ?",
                     "a": [
-                        "Pour le goût",
-                        "Pour éviter les microbes",
-                        "Pour la cuisson"
+                        "Plus de vitamines",
+                        "Le traitement thermique garantit l'absence de risque microbiologique",
+                        "Le lait cru ne se met pas au frigo"
                     ],
-                    "correct": 1
-                },
-                {
-                    "q": "En cas de doute sur un aliment, que faut-il faire ?",
-                    "a": [
-                        "Goûter",
-                        "Jeter",
-                        "Cuire plus"
-                    ],
-                    "correct": 1
+                    "correct": 1,
+                    "expert": "La pasteurisation élimine les micro-organismes dangereux ."
                 }
             ]
         }

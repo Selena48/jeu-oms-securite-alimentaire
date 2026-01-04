@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz OMS - La Reine des Micro-organismes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#272727',
+                        secondary: '#F8F7F1',
+                        bacteria: '#423567',
+                        'pillar-1': '#8BDFE7',
+                        'pillar-2': '#8DC947',
+                        'pillar-3': '#FFD04C',
+                        'pillar-4': '#FFA1C8',
+                        'pillar-5': '#FF6459',
+                        'success': '#21AA74',
+                        'error': '#FF6459',
+                    },
+                    fontFamily: {
+                        'staatliches': ['Staatliches', 'cursive'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+    <!-- Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        .option-button {
+            border: 3px solid #D1D5DB;
+            transition: all 0.2s ease;
+        }
+
+        .option-button.correct {
+            border-color: #21AA74 !important;
+            background-color: #D1FAE5 !important;
+        }
+
+        .option-button.incorrect {
+            border-color: #FF6459 !important;
+            background-color: #FEE2E2 !important;
+        }
+
+        .check-icon {
+            display: none;
+        }
+
+        .correct .check-icon {
+            display: inline;
+        }
+
+        .wrong-icon {
+            display: none;
+        }
+
+        .incorrect .wrong-icon {
+            display: inline;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Custom scrollbar for question card */
+        .overflow-y-auto::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background-color: #D1D5DB;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-primary min-h-screen font-poppins flex flex-col overflow-y-auto">
+
+    <!-- QUESTION SCREEN -->
+    <div id="questionScreen" class="flex-1 flex flex-col bg-secondary hidden">
+        <!-- Colored Header -->
+        <div id="quizHeader"
+            class="p-6 text-center text-primary relative flex flex-col items-center justify-center gap-2">
+            <img id="pillarHeaderImg" src="" alt="cle-titre" class="w-[20rem] my-4">
+            <!-- Back button -->
+            <button onclick="goBack()" class="absolute top-4 left-4 text-secondary hover:opacity-100">
+                <span class="material-symbols-rounded" style="font-size: 32px;">
+                    arrow_back
+                </span>
+            </button>
+        </div>
+
+        <!-- secondary Question Card -->
+        <div class="bg-secondary rounded-t-[2rem] flex-1 -mt-6 p-4 z-10 flex flex-col relative min-h-0">
+            <div
+                class="rounded-t-3xl border-4 border-primary bg-secondary flex-1 flex flex-col p-6 overflow-y-auto min-h-0">
+                <h2 id="questionText" class="text-2xl font-bold text-primary mb-8 leading-tight">
+                    Chargement de la question...
+                </h2>
+
+                <!-- Options Container -->
+                <div id="optionsContainer" class="flex flex-col gap-3">
+                    <!-- Options will be injected here -->
+                </div>
+
+                <!-- Feedback Area (Hidden initially) -->
+                <div id="feedbackArea" class="hidden flex items-center gap-4 mt-4">
+                    <img src="expert.svg" alt="Expert" class="w-20 h-20">
+                    <p id="explanationText" class="text-sm font-semibold text-gray-700 leading-tight">
+                        Explication de la réponse...
+                    </p>
+                </div>
+
+                <!-- Footer area with navigation and Progress -->
+                <div class="mt-auto flex items-end justify-between py-4">
+                    <div class="font-staatliches text-4xl text-primary opacity-30" id="currentStep">
+                        1/3
+                    </div>
+                    <button id="nextBtn"
+                        class="hidden bg-primary text-secondary font-inter font-bold py-3 px-8 rounded-xl hover:scale-105 active:scale-95 transition-transform">
+                        Suivant
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VICTORY SCREEN -->
+    <div id="victoryScreen" class="flex-1 flex flex-col p-4 hidden">
+        <div
+            class="flex-1 w-full border-4 border-secondary rounded-[2rem] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+            <div class="text-center mb-10 flex flex-col items-center">
+                <img src="bravo.png" alt="BRAVO !" class="w-80 my-2">
+                <p class="text-secondary text-2xl font-semibold">La clé est à vous.</p>
+            </div>
+            <div class="flex items-center gap-4 flex-col">
+                <div
+                    class="bg-bacteria text-secondary p-5 rounded-xl flex items-center gap-4 w-full max-w-xs relative border-4 border-transparent">
+                    <img src="bacteria.svg" alt="Reine" class="w-12 h-12">
+                    <p class="text-lg font-semibold leading-tight">
+                        Argh ! Ce savoir m'asphyxie... Arrêtez ça !
+                    </p>
+                </div>
+
+                <!-- Player Victory Info -->
+                <div class="bg-secondary rounded-xl border-4 border-primary p-6 w-full max-w-xs flex flex-col gap-4">
+                    <span class="font-staatliches text-2xl text-primary uppercase" id="victoryPlayerName">(NOM)</span>
+
+                    <div class="flex items-center gap-2">
+                        <div class="flex gap-1 flex-1" id="victoryProgressBoxes">
+                            <!-- Progress boxes will be colored based on game state -->
+                            <div class="flex-1 h-4 rounded bg-gray-200"></div>
+                            <div class="flex-1 h-4 rounded bg-gray-200"></div>
+                            <div class="flex-1 h-4 rounded bg-gray-200"></div>
+                            <div class="flex-1 h-4 rounded bg-gray-200"></div>
+                            <div class="flex-1 h-4 rounded bg-gray-200"></div>
+                        </div>
+                        <div class="text-xs font-bold text-primary secondaryspace-nowrap uppercase"
+                            id="victoryKeyCount">X/5
+                            CLÉS</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <button onclick="confirmQuizSuccess()"
+                class="mt-12 bg-secondary text-primary font-inter font-bold py-4 px-12 rounded-xl border-4 border-primary hover:scale-105 transition-transform">
+                Retour au plateau
+            </button>
+        </div>
+    </div>
+
+    <!-- FAILURE SCREEN -->
+    <div id="failureScreen" onclick="goBack()"
+        class="fixed inset-0 bg-primary/90 flex items-center justify-center hidden z-[100] cursor-pointer">
+        <img src="echec-cle.png" alt="Échec" class="w-full h-full object-cover">
+    </div>
+
+    <script>
+        // Game state
+        let gameData = null;
+        let currentPillar = null;
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let correctAnswersCount = 0;
+        let answered = false;
+        let isMusicMuted = localStorage.getItem('isMusicMuted') === 'true';
+
+        // Load data and init
+        async function initQuiz() {
+            try {
+                const response = await fetch('jeu-cartes.json');
+                gameData = await response.json();
+
+                // Get pillar from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                currentPillar = parseInt(urlParams.get('pillar'));
+
+                if (isNaN(currentPillar)) {
+                    const stored = sessionStorage.getItem('selectedPillar');
+                    currentPillar = stored !== null ? parseInt(stored) : 0;
+                }
+
+                startQuiz();
+            } catch (error) {
+                console.error("Error loading quiz data:", error);
+            }
+        }
+
+        function startQuiz() {
+            const pillar = gameData.pillars[currentPillar];
+
+            // Randomly select 3 questions
+            const allQuestions = [...pillar.questions];
+            selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+            updatePillarColors();
+            showQuestion();
+
+            document.getElementById('questionScreen').classList.remove('hidden');
+        }
+
+        function updatePillarColors() {
+            const pillar = gameData.pillars[currentPillar];
+            const header = document.getElementById('quizHeader');
+            const pillarColors = ['#8BDFE7', '#8DC947', '#FFD04C', '#FFA1C8', '#FF6459'];
+
+            header.style.backgroundColor = pillarColors[currentPillar];
+
+            const headerImg = document.getElementById('pillarHeaderImg');
+            if (headerImg && pillar.img) {
+                headerImg.src = pillar.img;
+            }
+
+            // Update question container border color
+            const borderDiv = document.querySelector('.border-4.border-primary');
+            if (borderDiv) {
+                borderDiv.style.borderColor = pillarColors[currentPillar];
+            }
+        }
+
+        function showQuestion() {
+            answered = false;
+            const question = selectedQuestions[currentQuestionIndex];
+
+            document.getElementById('questionText').textContent = question.q;
+            document.getElementById('currentStep').textContent = `${currentQuestionIndex + 1}/3`;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            question.a.forEach((option, idx) => {
+                const label = String.fromCharCode(65 + idx);
+                const button = document.createElement('button');
+                button.className = 'option-button flex items-center justify-between p-4 rounded-xl text-left font-semibold text-primary bg-secondary/50';
+                button.innerHTML = `
+                    <span class="flex-1 px-1 text-lg"><span class="mr-2">${label}.</span> ${option}</span>
+                    <span class="check-icon text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="wrong-icon text-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                `;
+                button.onclick = () => selectOption(idx);
+                container.appendChild(button);
+            });
+
+            // Reset UI
+            document.getElementById('feedbackArea').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+
+            const question = selectedQuestions[currentQuestionIndex];
+            const isCorrect = index === question.correct;
+            const options = document.querySelectorAll('.option-button');
+
+            // Mark correct answer and user's choice
+            options[question.correct].classList.add('correct');
+            if (!isCorrect) {
+                options[index].classList.add('incorrect');
+            }
+
+            // Show feedback
+            document.getElementById('explanationText').innerHTML = `
+                ${question.expert}
+            `;
+            document.getElementById('feedbackArea').classList.remove('hidden');
+
+            // Set up next step button
+            const nextBtn = document.getElementById('nextBtn');
+            if (isCorrect) {
+                correctAnswersCount++;
+                if (correctAnswersCount === 3) {
+                    nextBtn.textContent = 'Récupérer ma clé ! 🔑';
+                    nextBtn.onclick = showVictory;
+                } else {
+                    nextBtn.textContent = 'Suivant';
+                    nextBtn.onclick = () => {
+                        currentQuestionIndex++;
+                        showQuestion();
+                    };
+                }
+            } else {
+                if (!isMusicMuted) {
+                    const errorAudios = ['audio/erreur/erreur-1.mp3', 'audio/erreur/erreur-2.mp3', 'audio/erreur/erreur-3.mp3'];
+                    const randomErrorAudio = errorAudios[Math.floor(Math.random() * errorAudios.length)];
+                    new Audio(randomErrorAudio).play().catch(e => console.log("Audio play blocked"));
+                }
+                nextBtn.textContent = 'Continuer';
+                nextBtn.onclick = showFailure;
+            }
+            nextBtn.classList.remove('hidden');
+        }
+
+        function showVictory() {
+            const pillarColors = ['#8BDFE7', '#8DC947', '#FFD04C', '#FFA1C8', '#FF6459'];
+            const victoryScreen = document.getElementById('victoryScreen');
+            victoryScreen.style.backgroundColor = pillarColors[currentPillar];
+
+            document.getElementById('questionScreen').classList.add('hidden');
+            victoryScreen.classList.remove('hidden');
+
+            // Dynamic player info
+            const players = JSON.parse(localStorage.getItem('players') || '[]');
+            const currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex') || '0');
+            const playerName = players[currentPlayerIndex] || 'Joueur';
+            document.getElementById('victoryPlayerName').textContent = playerName;
+
+            // Updated keys count
+            const rawMode = localStorage.getItem('gameMode') || 'cooperative';
+            const mode = (rawMode === 'competitive' || rawMode === 'competitif') ? 'competitive' : 'cooperative';
+
+            let keys = [];
+            if (mode === 'cooperative') {
+                keys = JSON.parse(localStorage.getItem('teamKeys') || '[]');
+                if (!keys.includes(currentPillar)) keys.push(currentPillar);
+                document.getElementById('victoryKeyCount').textContent = `${keys.length}/5 CLÉS (ÉQUIPE)`;
+            } else {
+                const playerKeys = JSON.parse(localStorage.getItem('playerKeys') || '{}');
+                keys = playerKeys[playerName] || [];
+                if (!keys.includes(currentPillar)) keys.push(currentPillar);
+                document.getElementById('victoryKeyCount').textContent = `${keys.length}/5 CLÉS`;
+            }
+
+            // Progress boxes colors
+            const boxes = document.querySelectorAll('#victoryProgressBoxes > div');
+            keys.forEach((pillarIdx, i) => {
+                if (boxes[i]) {
+                    boxes[i].style.backgroundColor = pillarColors[pillarIdx];
+                    boxes[i].classList.remove('bg-gray-200');
+                }
+            });
+        }
+
+        function showFailure() {
+            document.getElementById('questionScreen').classList.add('hidden');
+            document.getElementById('failureScreen').classList.remove('hidden');
+        }
+
+        function confirmQuizSuccess() {
+            // Signal success to the game board
+            localStorage.setItem('quizResult', JSON.stringify({
+                success: true,
+                pillarIndex: currentPillar
+            }));
+            window.location.href = 'jeu-wireframe.html';
+        }
+
+        function goBack() {
+            window.location.href = 'jeu-wireframe.html';
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+
+    <!-- Global Music Controller -->
+    <script src="music-controller.js"></script>
+</body>
+
+</html>
