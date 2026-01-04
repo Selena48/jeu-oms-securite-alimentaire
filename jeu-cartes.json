@@ -4,7 +4,7 @@
             "name": "Salmonella",
             "title": "Le Sabotage de Salmonella",
             "image": "bacteria-salmonella.png",
-            "audio": "audio/cartes-incident/cuisson-insuffisante.mp3",
+            "audio": "audio/salmonella.mp3",
             "queenReaction": "👑 \"Mes sbires Salmonella ont infiltré tes œufs et ta volaille ! Comme ils souillent tout ce qu'ils touchent, je t'arrache l'un de tes précieux outils. Choisis celui que tu sacrifies !\"",
             "effect": "Le joueur perd un des objets positifs récupérés au choix.",
             "fact": "La contamination croisée par le matériel oblige à se débarrasser d'un objet souillé pour éviter l'infection.",
@@ -14,7 +14,7 @@
             "name": "Campylobacter",
             "title": "L'Agonie de Campylobacter",
             "image": "bacteria-campylobacter.png",
-            "audio": "audio/cartes-incident/chaine-du-froid-cassee.mp3",
+            "audio": "audio/campylobacter.mp3",
             "queenReaction": "👑 \"Une seule goutte de jus de poulet cru suffit à libérer Campylobacter ! Elle va tordre tes entrailles avec une telle violence que tu vas rester cloué au sol. Tu ne bougeras pas au prochain tour !\"",
             "effect": "Le joueur passe son prochain tour à cause d'un cas d'intoxication alimentaire.",
             "fact": "La dose infectieuse est si faible qu'elle provoque une incapacité totale immédiate du cuisinier.",
@@ -24,7 +24,7 @@
             "name": "E. coli",
             "title": "La Paralysie d'E. coli",
             "image": "bacteria-e-coli.png",
-            "audio": "audio/cartes-incident/legumes-non-laves.mp3",
+            "audio": "audio/ecoli.mp3",
             "queenReaction": "👑 \"E. coli s'est glissée dans ta viande mal cuite et libère ses toxines ! Ton plan de travail est maintenant un champ de poison : interdiction de toucher à tes ustensiles au prochain tour !\"",
             "effect": "Vous ne pouvez utiliser aucun de vos objets positifs lors du prochain tour.",
             "fact": "Les toxines produites par la bactérie rendent la manipulation de tout objet dangereuse tant que la zone n'est pas assainie.",
@@ -34,7 +34,7 @@
             "name": "Shigella",
             "title": "Le Larcin de Shigella",
             "image": "bacteria-shigella.png",
-            "audio": "audio/cartes-incident/eponge-contaminee.mp3",
+            "audio": "audio/shigella.mp3",
             "queenReaction": "👑 \"Shigella, ma voleuse d'élite, est passée par tes mains sales ! Elle détruit toute ton énergie et rend ton plat immangeable. Rends-moi cette clé, ton travail ne vaut plus rien !\"",
             "effect": "Vous perdez la dernière clé obtenue.",
             "fact": "La dysenterie sévère causée par ce microbe invalide la sécurité sanitaire de votre poste de travail, annulant votre succès.",
@@ -44,7 +44,7 @@
             "name": "Norovirus",
             "title": "Le Vortex du Norovirus",
             "image": "bacteria-norovirus.png",
-            "audio": "audio/cartes-incident/rincage-bacle.mp3",
+            "audio": "audio/norovirus.mp3",
             "queenReaction": "👑 \"Admirez la puissance de mon Norovirus ! Il saute de personne en personne comme une traînée de poudre. Toute la brigade est infectée : changez tous de poste immédiatement !\"",
             "effect": "Tous les joueurs permutent de place avec leur voisin de gauche.",
             "fact": "Sa résistance et sa propagation fulgurante en milieu clos créent un chaos qui désorganise toute la cuisine.",
@@ -55,6 +55,8 @@
         {
             "name": "Savon Doré",
             "image": "carte-savon.png",
+            "jeton": "jeton-savon.png",
+            "audio": "audio/savon.mp3",
             "expert": "Écoutez bien, je vous souffle la réponse ! Rappelez-vous : 80% des contaminations passent par les mains ! Lavez-les à l'eau potable et au savon avant de cuisiner et après avoir manipulé des aliments crus. C'est pourquoi ce savon vous permet de corriger une petite erreur sans conséquence.",
             "effect": "Annule 1 erreur sur les 3 questions d'une case clé",
             "action": "cancel_one_error"
@@ -62,6 +64,8 @@
         {
             "name": "Désinfectant Magique",
             "image": "carte-desinfectant.png",
+            "jeton": "jeton-desinfectant.png",
+            "audio": "audio/desinfectant.mp3",
             "expert": "Ne baissez pas les bras, je vous autorise un rattrapage ! L'OMS le dit : Nettoyer ne suffit pas toujours. L'OMS recommande de désinfecter les surfaces après contact avec des aliments crus, surtout la viande, le poisson et les œufs. Ce désinfectant vous autorise donc à recommencer l'épreuve proprement.",
             "effect": "En cas d'échec sur une case clé, retentez immédiatement avec 3 nouvelles questions",
             "action": "retry_quiz"
@@ -69,6 +73,8 @@
         {
             "name": "Balance de précision",
             "image": "carte-balance.png",
+            "jeton": "jeton-balance.png",
+            "audio": "audio/balance.mp3",
             "expert": "L'OMS indique que de petites variations dans les paramètres de préparation peuvent suffire à rendre un aliment à risque. Cette balance vous permet de corriger une décision approximative.",
             "effect": "Relancer le dé si vous n'êtes pas satisfait du résultat",
             "action": "reroll_dice"
@@ -76,6 +82,8 @@
         {
             "name": "Thermomètre",
             "image": "carte-thermometre.png",
+            "jeton": "jeton-thermometre.png",
+            "audio": "audio/thermometre.mp3",
             "expert": "Selon l'OMS, la \"zone de danger\" se situe entre 5 °C et 60 °C, où les bactéries se multiplient rapidement. Ce thermomètre vous permet de vous assurez que vous êtes à bonne température pour vous éviter une attaque de la reine.",
             "effect": "Annule une Attaque Microbienne que vous rencontrez",
             "action": "cancel_malchance"
@@ -83,6 +91,8 @@
         {
             "name": "Le Chariot de Service",
             "image": "carte-chariot.png",
+            "jeton": "jeton-chariot.png",
+            "audio": "audio/chariot.mp3",
             "expert": "L'OMS recommande d'organiser les déplacements et les manipulations afin d'éviter les contaminations croisées. Ce chariot vous permet de vous déplacer sans risque inutile.",
             "effect": "Téléporter vous sur la case du joueur que vous souhaitez",
             "action": "teleport_to_player"

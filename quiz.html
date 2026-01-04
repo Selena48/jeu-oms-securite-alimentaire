@@ -90,14 +90,58 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Custom scrollbar for question card */
-        .overflow-y-auto::-webkit-scrollbar {
-            width: 4px;
-        }
-
         .overflow-y-auto::-webkit-scrollbar-thumb {
             background-color: #D1D5DB;
             border-radius: 4px;
+        }
+
+        /* Physical Power-Up Buttons */
+        .powerup-btn {
+            background: #fff;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'poppins', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 var(--primary-color);
+            position: relative;
+            top: 0;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        .powerup-btn:active {
+            top: 2px;
+            box-shadow: 0 2px 0 var(--primary-color);
+        }
+
+        .powerup-btn img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .pulse-powerup {
+            animation: powerup-pulse 1.5s infinite;
+        }
+
+        @keyframes powerup-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 39, 39, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 39, 39, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 39, 39, 0);
+            }
         }
     </style>
 </head>
@@ -199,8 +243,9 @@
     </div>
 
     <!-- FAILURE SCREEN -->
-    <div id="failureScreen" onclick="goBack()"
-        class="fixed inset-0 bg-primary/90 flex items-center justify-center hidden z-[100] cursor-pointer">
+    <div id="failureScreen"
+        class="fixed inset-0 bg-primary flex items-center justify-center hidden z-[100] cursor-pointer"
+        onclick="window.location.href='jeu-wireframe.html'">
         <img src="echec-cle.png" alt="Échec" class="w-full h-full object-cover">
     </div>
 
@@ -338,15 +383,67 @@
                     };
                 }
             } else {
-                if (!isMusicMuted) {
-                    const errorAudios = ['audio/erreur/erreur-1.mp3', 'audio/erreur/erreur-2.mp3', 'audio/erreur/erreur-3.mp3'];
-                    const randomErrorAudio = errorAudios[Math.floor(Math.random() * errorAudios.length)];
-                    new Audio(randomErrorAudio).play().catch(e => console.log("Audio play blocked"));
+                // Incorrect answer logic
+                const players = JSON.parse(localStorage.getItem('players') || '[]');
+                const currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex') || '0');
+                const playerName = players[currentPlayerIndex];
+                const mode = localStorage.getItem('gameMode') || 'cooperative';
+
+                let hasSoap = false;
+                if (mode === 'cooperative') {
+                    const items = JSON.parse(localStorage.getItem('teamItems') || '[]');
+                    hasSoap = items.includes('cancel_one_error');
+                } else {
+                    const allPlayerItems = JSON.parse(localStorage.getItem('playerItems') || '{}');
+                    const pItems = allPlayerItems[playerName] || [];
+                    hasSoap = pItems.includes('cancel_one_error');
+                }
+
+                if (hasSoap) {
+                    showPowerupConfirm('cancel_one_error', () => {
+                        consumeItem('cancel_one_error');
+                        useSoapLogic();
+                    }, () => {
+                        nextBtn.textContent = 'Continuer';
+                        nextBtn.onclick = showFailure;
+                        nextBtn.classList.remove('hidden');
+                    });
+                    return;
                 }
                 nextBtn.textContent = 'Continuer';
-                nextBtn.onclick = showFailure;
+                nextBtn.onclick = showFailure; // If no soap, proceed to failure
             }
             nextBtn.classList.remove('hidden');
+        }
+
+        function useSoapLogic() {
+            answered = false;
+            const options = document.querySelectorAll('.option-button');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'auto'; // Re-enable clicking
+            });
+            document.getElementById('feedbackArea').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function consumeItem(action) {
+            const players = JSON.parse(localStorage.getItem('players') || '[]');
+            const currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex') || '0');
+            const playerName = players[currentPlayerIndex];
+            const mode = localStorage.getItem('gameMode') || 'cooperative';
+
+            if (mode === 'cooperative') {
+                let items = JSON.parse(localStorage.getItem('teamItems') || '[]');
+                items = items.filter(i => i !== action);
+                localStorage.setItem('teamItems', JSON.stringify(items));
+            } else {
+                let allItems = JSON.parse(localStorage.getItem('playerItems') || '{}');
+                if (allItems[playerName]) {
+                    allItems[playerName] = allItems[playerName].filter(i => i !== action);
+                    localStorage.setItem('playerItems', JSON.stringify(allItems));
+                }
+            }
         }
 
         function showVictory() {
@@ -356,6 +453,10 @@
 
             document.getElementById('questionScreen').classList.add('hidden');
             victoryScreen.classList.remove('hidden');
+
+            // Play success audio
+            const successAudio = new Audio('audio/cle-obtenue.mp3');
+            successAudio.play().catch(e => console.log('Audio playback failed:', e));
 
             // Dynamic player info
             const players = JSON.parse(localStorage.getItem('players') || '[]');
@@ -371,27 +472,108 @@
             if (mode === 'cooperative') {
                 keys = JSON.parse(localStorage.getItem('teamKeys') || '[]');
                 if (!keys.includes(currentPillar)) keys.push(currentPillar);
+                localStorage.setItem('teamKeys', JSON.stringify(keys)); // Save updated keys
                 document.getElementById('victoryKeyCount').textContent = `${keys.length}/5 CLÉS (ÉQUIPE)`;
             } else {
                 const playerKeys = JSON.parse(localStorage.getItem('playerKeys') || '{}');
                 keys = playerKeys[playerName] || [];
                 if (!keys.includes(currentPillar)) keys.push(currentPillar);
+                playerKeys[playerName] = keys; // Update specific player's keys
+                localStorage.setItem('playerKeys', JSON.stringify(playerKeys)); // Save updated player keys
                 document.getElementById('victoryKeyCount').textContent = `${keys.length}/5 CLÉS`;
             }
 
             // Progress boxes colors
             const boxes = document.querySelectorAll('#victoryProgressBoxes > div');
-            keys.forEach((pillarIdx, i) => {
-                if (boxes[i]) {
-                    boxes[i].style.backgroundColor = pillarColors[pillarIdx];
-                    boxes[i].classList.remove('bg-gray-200');
+            // Clear existing colors
+            boxes.forEach(box => box.classList.add('bg-gray-200'));
+            // Apply new colors
+            keys.forEach((pillarIdx) => {
+                // Find the correct box to color based on pillarIdx, not just iteration
+                const boxIndex = pillarIdx; // Assuming pillarIdx directly maps to box index for simplicity
+                if (boxes[boxIndex]) {
+                    boxes[boxIndex].style.backgroundColor = pillarColors[pillarIdx];
+                    boxes[boxIndex].classList.remove('bg-gray-200');
                 }
             });
         }
 
         function showFailure() {
+            const players = JSON.parse(localStorage.getItem('players') || '[]');
+            const currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex') || '0');
+            const playerName = players[currentPlayerIndex];
+            const mode = localStorage.getItem('gameMode') || 'cooperative';
+
+            let hasDisinfectant = false;
+            if (mode === 'cooperative') {
+                const items = JSON.parse(localStorage.getItem('teamItems') || '[]');
+                hasDisinfectant = items.includes('retry_quiz');
+            } else {
+                const allPlayerItems = JSON.parse(localStorage.getItem('playerItems') || '{}');
+                const pItems = allPlayerItems[playerName] || [];
+                hasDisinfectant = pItems.includes('retry_quiz');
+            }
+
+            if (hasDisinfectant) {
+                showPowerupConfirm('retry_quiz', () => {
+                    consumeItem('retry_quiz');
+                    currentQuestionIndex = 0;
+                    correctAnswersCount = 0;
+                    startQuiz();
+                }, () => {
+                    // Play failure audio when user declines to use disinfectant
+                    const failureAudio = new Audio('audio/cle-loupe.mp3');
+                    failureAudio.play().catch(e => console.log('Audio playback failed:', e));
+
+                    document.getElementById('questionScreen').classList.add('hidden');
+                    document.getElementById('failureScreen').classList.remove('hidden');
+                });
+                return;
+            }
+
+            // Play failure audio
+            const failureAudio = new Audio('audio/cle-loupe.mp3');
+            failureAudio.play().catch(e => console.log('Audio playback failed:', e));
+
             document.getElementById('questionScreen').classList.add('hidden');
             document.getElementById('failureScreen').classList.remove('hidden');
+        }
+
+        // Custom Modal Logic
+        function showPowerupConfirm(action, onConfirm, onCancel = null) {
+            // Fetch item from gameData
+            fetch('jeu-cartes.json')
+                .then(r => r.json())
+                .then(data => {
+                    const card = data.chances.find(c => c.action === action);
+                    if (!card) return;
+
+                    const modal = document.getElementById('powerupUsageModal');
+                    const title = document.getElementById('powerupConfirmTitle');
+                    const img = document.getElementById('powerupConfirmImg');
+                    const text = document.getElementById('powerupConfirmText');
+                    const confirmBtn = document.getElementById('powerupConfirmBtn');
+                    const cancelBtn = document.getElementById('powerupCancelBtn');
+
+                    title.textContent = `UTILISER LE ${card.name.toUpperCase()} ?`;
+                    img.src = card.jeton || card.image;
+                    text.textContent = `Voulez-vous utiliser votre jeton physique ${card.name} ?`;
+
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.add('show'), 10);
+
+                    confirmBtn.onclick = () => {
+                        modal.classList.remove('show');
+                        setTimeout(() => modal.classList.add('hidden'), 300);
+                        if (onConfirm) onConfirm();
+                    };
+
+                    cancelBtn.onclick = () => {
+                        modal.classList.remove('show');
+                        setTimeout(() => modal.classList.add('hidden'), 300);
+                        if (onCancel) onCancel();
+                    };
+                });
         }
 
         function confirmQuizSuccess() {
@@ -413,6 +595,63 @@
 
     <!-- Global Music Controller -->
     <script src="music-controller.js"></script>
+
+    <style>
+        /* Custom Power-up Usage Modal Styles */
+        #powerupUsageModal {
+            transition: all 0.3s ease;
+        }
+
+        .powerup-confirm-card {
+            background: #F8F7F1;
+            border: 6px solid var(--primary-color);
+            border-radius: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #powerupUsageModal.show .powerup-confirm-card {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .powerup-confirm-image {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+            margin: 0 auto;
+        }
+    </style>
+
+    <!-- Custom Power-Up Usage Modal -->
+    <div id="powerupUsageModal" class="hidden fixed inset-0 bg-black/70 z-[2000] flex items-center justify-center p-6">
+        <div class="powerup-confirm-card bg-secondary w-full max-w-sm p-8 flex flex-col gap-6 text-center">
+            <div class="py-4">
+                <img id="powerupConfirmImg" src="" alt="Jeton" class="powerup-confirm-image">
+            </div>
+            <h2 id="powerupConfirmTitle" class="font-staatliches text-4xl text-primary leading-none uppercase">
+                UTILISER ?
+            </h2>
+            <p id="powerupConfirmText" class="font-poppins text-lg font-bold text-primary opacity-80 leading-tight">
+                Voulez-vous utiliser votre jeton physique ?
+            </p>
+
+            <div class="flex gap-4 mt-2">
+                <button id="powerupCancelBtn"
+                    class="flex-1 bg-secondary border-2 border-primary text-primary font-poppins font-bold text-xl py-4 rounded-lg hover:bg-gray-100 transition-colors">
+                    NON
+                </button>
+                <button id="powerupConfirmBtn"
+                    class="flex-1 bg-primary text-secondary font-poppins font-bold text-xl py-4 rounded-lg hover:scale-105 transition-transform shadow-lg">
+                    OUI
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
+```

@@ -56,7 +56,33 @@
 
         }
 
-        /* Animations */
+        /* Custom Power-up Usage Modal */
+        #powerupUsageModal {
+            transition: all 0.3s ease;
+        }
+
+        .powerup-confirm-card {
+            background: #F8F7F1;
+            border: 6px solid var(--primary-color);
+            border-radius: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #powerupUsageModal.show .powerup-confirm-card {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .powerup-confirm-image {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+            margin: 0 auto;
+        }
 
         /* Background image disabled - using solid color instead
         body::before {
@@ -113,58 +139,126 @@
             background-color: var(--pillar-5-color) !important;
         }
 
-        /* Key Loss Animation */
-        @keyframes keyLossPopup {
+        /* Malchance & Effects Notification */
+        #effectNotification {
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        #effectNotification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .effect-bubble {
+            background: rgba(66, 53, 103, 0.95);
+            border: 4px solid var(--bg-color);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(66, 53, 103, 0.3), 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .effect-bubble.chance-bubble {
+            background: var(--bg-color);
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1), 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .effect-bubble.chance-bubble #effectTitle {
+            color: var(--primary-color);
+        }
+
+        .effect-bubble.chance-bubble #effectText {
+            color: var(--primary-color);
+            opacity: 0.8;
+        }
+
+        .effect-bubble::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(248, 247, 241, 0.1) 0%, transparent 70%);
+            animation: pulse-bg 3s infinite alternate;
+        }
+
+        @keyframes pulse-bg {
             0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
+                transform: scale(1);
+                opacity: 0.5;
             }
 
-            10% {
+            100% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .key-loss-image {
+            width: 140px;
+            margin: 0 auto 1.5rem;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+
+        /* Dissolve animation for the key */
+        @keyframes dissolveOut {
+            0% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
+                transform: scale(1) rotate(0deg);
+                filter: blur(0) brightness(1);
             }
 
-            20% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            80% {
+            30% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: scale(1.1) rotate(5deg);
+                filter: blur(2px) brightness(1.5);
             }
 
             100% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: scale(0.4) rotate(-15deg);
+                filter: blur(20px) brightness(2);
             }
         }
 
-        #keyLossNotification.show {
-            display: block !important;
-            animation: keyLossPopup 2.5s ease-in-out;
+        .dissolve-animation {
+            animation: dissolveOut 1.8s forwards ease-in-out;
         }
 
-        /* Progress bar key removal animation */
-        @keyframes keyRemoval {
+        /* Progress box removal effect */
+        @keyframes boxShrink {
             0% {
-                opacity: 1;
                 transform: scale(1);
+                opacity: 1;
+                filter: brightness(1);
             }
 
             50% {
-                opacity: 0.5;
-                transform: scale(1.2);
+                transform: scale(1.3);
+                opacity: 0.7;
+                filter: brightness(2);
             }
 
             100% {
-                opacity: 0;
                 transform: scale(0);
+                opacity: 0;
+                filter: brightness(3);
             }
         }
 
-        .key-removing {
-            animation: keyRemoval 0.5s ease-out forwards;
+        .box-removing {
+            animation: boxShrink 0.8s forwards ease-in;
         }
 
         /* Event modal backgrounds (appliquées dynamiquement) */
@@ -228,6 +322,58 @@
         .danger {
             font-weight: 700;
         }
+
+        #itemUsagePrompt {
+            backdrop-filter: blur(8px);
+        }
+
+        /* Physical Power-Up Buttons */
+        .powerup-btn {
+            background: #fff;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'poppins', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 var(--primary-color);
+            position: relative;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .powerup-btn:active {
+            top: 2px;
+            box-shadow: 0 2px 0 var(--primary-color);
+        }
+
+        .powerup-btn img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .pulse-powerup {
+            animation: powerup-pulse 1.5s infinite;
+        }
+
+        @keyframes powerup-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 39, 39, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 39, 39, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 39, 39, 0);
+            }
+        }
     </style>
 </head>
 
@@ -267,6 +413,8 @@
                     joueur</span>
                 <span class="font-poppins">C’est à vous de jouer !</span>
             </div>
+
+
 
             <!-- Progress bar -->
             <div class="flex items-center gap-2">
@@ -317,12 +465,24 @@
             class="w-full py-3 px-5 font-poppins font-semibold bg-secondary text-primary cursor-pointer font-semibold text-base rounded-lg transition-all hover:opacity-90 border-2 border-primary"
             onclick="nextPlayer()">
             Joueur suivant
+        </button>
+    </div>
+
+    <!-- Notification d'Effets (Malchance, etc) -->
+    <div id="effectNotification" class="fixed top-1/2 left-1/2 z-[500] hidden">
+        <div class="effect-bubble">
+            <img id="effectIcon" src="cles-oms.png" alt="Effet" class="key-loss-image">
+            <h2 id="effectTitle" class="font-staatliches text-4xl text-secondary mb-2 uppercase leading-none">EFFET !
+            </h2>
+            <p id="effectText" class="font-poppins text-lg font-semibold text-secondary leading-tight"></p>
+        </div>
     </div>
 
     <!-- Modal Malchance (Fullscreen Image Only) -->
-    <div class="hidden fixed inset-0 bg-primary z-[200] flex items-center justify-center cursor-pointer"
-        id="malchanceScreen" onclick="closeMalchance()">
-        <img id="malchanceImage" src="" alt="Malchance" class="max-w-full max-h-full object-contain">
+    <div class="hidden fixed inset-0 bg-primary z-[200] flex flex-col items-center justify-center" id="malchanceScreen">
+        <div class="relative flex-1 flex items-center justify-center cursor-pointer w-full" onclick="closeMalchance()">
+            <img id="malchanceImage" src="" alt="Malchance" class="max-w-full max-h-full object-contain">
+        </div>
     </div>
 
     <!-- Modal Chance (Fullscreen Image Only) -->
@@ -336,6 +496,25 @@
         id="finalVictoryScreen" onclick="resetGame()">
         <img src="ecran-victoire.png" alt="Victoire Finale" class="w-full h-full object-cover">
     </div>
+
+    <!-- Teleport Modal -->
+    <div id="teleportModal" class="hidden fixed inset-0 bg-black/80 z-[1000] flex items-center justify-center p-6">
+        <div
+            class="bg-secondary p-8 rounded-3xl border-4 border-primary max-w-sm w-full text-center flex flex-col gap-6 shadow-2xl">
+            <h3 class="font-staatliches text-3xl text-primary">TÉLÉPORTATION</h3>
+            <p class="font-poppins text-sm text-primary/70">Vers quel poste de travail voulez-vous vous rendre ?</p>
+            <div id="teleportPlayerList" class="flex flex-col gap-1 max-h-[300px] overflow-y-auto pr-2">
+                <!-- Les joueurs seront listés ici -->
+            </div>
+            <button onclick="document.getElementById('teleportModal').classList.add('hidden')"
+                class="bg-gray-200 text-primary font-staatliches text-xl py-4 rounded-2xl active:scale-95 transition-transform mt-2">
+                ANNULER
+            </button>
+        </div>
+    </div>
+
+
+
 
     <!-- Settings Modal -->
     <div id="settingsModal"
@@ -391,6 +570,8 @@
         // Game mode management
         let gameMode = 'cooperative'; // 'cooperative' or 'competitive'
         let teamKeys = []; // For cooperative mode - shared keys
+        let playerItems = {}; // Hidden inventory for each player
+        let teamItems = []; // Hidden inventory for team (cooperative)
 
         // Get game mode from URL parameters
         function getGameMode() {
@@ -475,6 +656,8 @@
             localStorage.setItem('currentPlayerIndex', currentPlayerIndex);
             localStorage.setItem('playerKeys', JSON.stringify(playerKeys));
             localStorage.setItem('teamKeys', JSON.stringify(teamKeys));
+            localStorage.setItem('playerItems', JSON.stringify(playerItems));
+            localStorage.setItem('teamItems', JSON.stringify(teamItems));
         }
 
         function loadGameState() {
@@ -486,6 +669,12 @@
 
             const savedTeamKeys = localStorage.getItem('teamKeys');
             if (savedTeamKeys) teamKeys = JSON.parse(savedTeamKeys);
+
+            const savedPlayerItems = localStorage.getItem('playerItems');
+            if (savedPlayerItems) playerItems = JSON.parse(savedPlayerItems);
+
+            const savedTeamItems = localStorage.getItem('teamItems');
+            if (savedTeamItems) teamItems = JSON.parse(savedTeamItems);
         }
 
         // LOAD PLAYERS: Initialize from localStorage
@@ -516,6 +705,9 @@
                 }
                 if (!playerKeys[player]) {
                     playerKeys[player] = [];
+                }
+                if (!playerItems[player]) {
+                    playerItems[player] = [];
                 }
             });
 
@@ -592,6 +784,8 @@
                 updatePlayerProgressBar();
             }
         }
+
+
 
         // Fonction pour passer au joueur suivant
         function nextPlayer() {
@@ -729,7 +923,10 @@
                 // Set only the image
                 document.getElementById("chanceImage").src = card.image;
 
-                // No audio for chance cards (only expert text)
+                // Play audio
+                if (card.audio) {
+                    playAudio(card.audio);
+                }
 
                 // Store action to execute after modal closes
                 pendingChanceAction = card.action;
@@ -888,55 +1085,111 @@
             }
         }
 
+
+
         // Execute malchance card actions
         function executeMalchanceAction(action) {
+            // Check for Thermometer (cancel_malchance)
+            const currentPlayer = players[currentPlayerIndex];
+            const hasThermometer = gameMode === 'cooperative'
+                ? teamItems.includes('cancel_malchance')
+                : playerItems[currentPlayer]?.includes('cancel_malchance');
+
+            if (hasThermometer) {
+                showPowerupConfirm('cancel_malchance', () => {
+                    // Use it
+                    if (gameMode === 'cooperative') {
+                        teamItems = teamItems.filter(i => i !== 'cancel_malchance');
+                    } else {
+                        playerItems[currentPlayer] = playerItems[currentPlayer].filter(i => i !== 'cancel_malchance');
+                    }
+                    saveGameState();
+                    showMalchanceEffect("EFFET ANNULÉ !", "Le thermomètre vous a sauvé !", "carte-thermometre.png");
+                }, () => {
+                    actuallyExecuteMalchanceAction(action);
+                });
+                return;
+            }
+
+            actuallyExecuteMalchanceAction(action);
+        }
+
+        function actuallyExecuteMalchanceAction(action) {
             const currentPlayer = players[currentPlayerIndex];
 
             switch (action) {
                 case 'lose_item':
-                    // TODO: Implement item loss (when items system is added)
+                    showMalchanceEffect(
+                        "OBJET PERDU !",
+                        "Une bactérie a souillé l'un de vos ustensiles. Débarrassez-vous en !",
+                        "bacteria.svg"
+                    );
                     break;
 
                 case 'skip_turn':
-                    // TODO: Implement turn skipping
+                    showMalchanceEffect(
+                        "TOUR PASSÉ !",
+                        "L'intoxication est trop forte... Vous devez rester au lit au prochain tour.",
+                        "bacteria.svg"
+                    );
                     break;
 
                 case 'block_items':
-                    // TODO: Implement item blocking
+                    showMalchanceEffect(
+                        "CUISINE BLOQUÉE !",
+                        "Tout est contaminé ! Vous ne pourrez utiliser aucun objet au prochain tour.",
+                        "bacteria.svg"
+                    );
                     break;
 
                 case 'lose_last_key':
                     // Remove last key from player with animation
+                    let lostKeyIndex = -1;
                     if (gameMode === 'cooperative') {
                         if (teamKeys.length > 0) {
-                            const lostKey = teamKeys.pop();
+                            lostKeyIndex = teamKeys.pop();
 
-                            // Update progress bar IMMEDIATELY
-                            updateProgress();
+                            // Start visual animation
+                            showKeyDissolveAnimation(lostKeyIndex, "CLÉ PERDUE !");
 
-                            // Show notification after progress update
-                            showKeyLossNotification(`Clé ${lostKey + 1} perdue !`);
+                            // Animation on progress bar
+                            animateProgressBoxRemoval(teamKeys.length);
+
+                            // Actual data update after visual
+                            setTimeout(() => {
+                                saveGameState(); // Sauvegarder l'état mis à jour
+                                updateProgress();
+                            }, 2000);
                         } else {
-                            showKeyLossNotification("Aucune clé à perdre");
+                            showMalchanceEffect("OUF !", "Vous n'avez pas encore de clé à perdre... pour l'instant.", "bacteria.svg");
                         }
                     } else {
                         if (playerKeys[currentPlayer] && playerKeys[currentPlayer].length > 0) {
-                            const lostKey = playerKeys[currentPlayer].pop();
+                            lostKeyIndex = playerKeys[currentPlayer].pop();
 
-                            // Update progress bar IMMEDIATELY
-                            updatePlayerProgressBar();
+                            // Start visual animation
+                            showKeyDissolveAnimation(lostKeyIndex, `${currentPlayer} PERD SA CLÉ !`);
 
-                            // Show notification after progress update
-                            showKeyLossNotification(`${currentPlayer} perd la Clé ${lostKey + 1} !`);
+                            // Animation on progress bar
+                            animateProgressBoxRemoval(playerKeys[currentPlayer].length);
+
+                            // Actual data update after visual
+                            setTimeout(() => {
+                                saveGameState(); // Sauvegarder l'état mis à jour
+                                updatePlayerProgressBar();
+                            }, 2000);
                         } else {
-                            showKeyLossNotification(`${currentPlayer} n'a aucune clé à perdre`);
+                            showMalchanceEffect("CHANCEUX !", `${currentPlayer} n'a aucune clé à perdre.`, "bacteria.svg");
                         }
                     }
                     break;
 
                 case 'swap_positions':
-                    // Swap all players with their left neighbor
-                    // TODO: Implement position swapping when board positions are added
+                    showMalchanceEffect(
+                        "PANIQUE !",
+                        "Tout le monde change de poste de travail ! Échangez vos places.",
+                        "bacteria.svg"
+                    );
                     break;
 
                 default:
@@ -946,32 +1199,25 @@
 
         // Execute chance card actions
         function executeChanceAction(action) {
+            const card = gameData.chances.find(c => c.action === action);
+            if (!card) return;
+
+            // Add to hidden inventory
             const currentPlayer = players[currentPlayerIndex];
-
-            switch (action) {
-                case 'cancel_one_error':
-                    // TODO: Implement error cancellation in quiz
-                    break;
-
-                case 'retry_quiz':
-                    // TODO: Implement quiz retry
-                    break;
-
-                case 'reroll_dice':
-                    // TODO: Implement dice reroll
-                    break;
-
-                case 'cancel_malchance':
-                    // TODO: Implement malchance cancellation
-                    break;
-
-                case 'teleport_to_player':
-                    // TODO: Implement teleportation
-                    break;
-
-                default:
-                    console.log('Unknown chance action:', action);
+            if (gameMode === 'cooperative') {
+                if (!teamItems.includes(action)) teamItems.push(action);
+            } else {
+                if (!playerItems[currentPlayer]) playerItems[currentPlayer] = [];
+                if (!playerItems[currentPlayer].includes(action)) playerItems[currentPlayer].push(action);
             }
+            saveGameState();
+
+            // Notify UI
+            if (typeof updatePowerupsDisplay === 'function') updatePowerupsDisplay();
+
+            // Show a notification telling the player to take the physical token
+            // Use card.jeton if available, otherwise fallback to card.image
+            showMalchanceEffect("BRAVO !", `Récupérez votre jeton physique :\n${card.name.toUpperCase()}`, card.jeton || card.image, true);
         }
 
         // Update cooperative mode progress bar
@@ -987,13 +1233,16 @@
             // Update visual boxes
             const boxes = progressBoxes.children;
             for (let i = 0; i < 5; i++) {
+                // Clear all dynamic classes
+                boxes[i].classList.remove('pillar-1', 'pillar-2', 'pillar-3', 'pillar-4', 'pillar-5', 'bg-gray-300', 'box-removing');
+
                 if (i < teamKeys.length) {
                     // Key obtained - show pillar color
                     const pillarIndex = teamKeys[i];
-                    boxes[i].className = `flex-1 h-3 rounded pillar-${pillarIndex + 1}`;
+                    boxes[i].classList.add(`pillar-${pillarIndex + 1}`);
                 } else {
                     // No key - gray
-                    boxes[i].className = 'flex-1 h-3 rounded bg-gray-300';
+                    boxes[i].classList.add('bg-gray-300');
                 }
             }
         }
@@ -1004,18 +1253,162 @@
             console.log('Player progress bar update needed for competitive mode');
         }
 
-        // Show key loss notification with animation
-        function showKeyLossNotification(message) {
-            const notification = document.getElementById('keyLossNotification');
-            const textElement = document.getElementById('keyLossText');
+        // Generic malchance/chance effect notification
+        function showMalchanceEffect(title, message, iconPath, isChance = false) {
+            const notification = document.getElementById('effectNotification');
+            const bubble = notification.querySelector('.effect-bubble');
+            const titleElem = document.getElementById('effectTitle');
+            const textElem = document.getElementById('effectText');
+            const iconElem = document.getElementById('effectIcon');
 
-            textElement.textContent = message;
+            titleElem.textContent = title;
+            textElem.textContent = message;
+            iconElem.src = iconPath || "bacteria.svg";
+            iconElem.classList.remove('dissolve-animation');
+
+            if (isChance) {
+                bubble.classList.add('chance-bubble');
+            } else {
+                bubble.classList.remove('chance-bubble');
+            }
+
             notification.classList.add('show');
+            notification.style.display = 'block';
 
-            // Remove the class after animation completes
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 2500);
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    bubble.classList.remove('chance-bubble'); // Reset
+                }, 500);
+            }, 3000);
+        }
+
+        // Specific key dissolve animation
+        function showKeyDissolveAnimation(pillarIndex, message) {
+            const notification = document.getElementById('effectNotification');
+            const titleElem = document.getElementById('effectTitle');
+            const textElem = document.getElementById('effectText');
+            const iconElem = document.getElementById('effectIcon');
+
+            titleElem.textContent = "MALCHANCE !";
+            textElem.textContent = message;
+            iconElem.src = `OMS-${pillarIndex + 1}.png`;
+
+            notification.classList.add('show');
+            notification.style.display = 'block';
+
+            // Start dissolve animation after a small pause
+            setTimeout(() => {
+                iconElem.classList.add('dissolve-animation');
+
+                // Audio for key loss (optional, could add later)
+                // playAudio('audio/key-loss.mp3'); 
+            }, 600);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    iconElem.classList.remove('dissolve-animation');
+                }, 500);
+            }, 4000);
+        }
+
+        // Animate the progress box being removed
+        function animateProgressBoxRemoval(boxIndex) {
+            const progressBoxes = document.querySelectorAll('#progressBoxes > div');
+            if (progressBoxes[boxIndex]) {
+                progressBoxes[boxIndex].classList.add('box-removing');
+                // The actual removal happens when updateProgress is called after timeout
+            }
+        }
+
+        function showKeyLossNotification(message) {
+            showMalchanceEffect("ALERTE !", message, "bacteria.svg");
+        }
+
+        // PHYSICAL TOKEN CONSUMPTION HELPERS (Digital cleanup)
+        function consumeItem(action) {
+            const currentPlayer = players[currentPlayerIndex];
+            if (gameMode === 'cooperative') {
+                teamItems = teamItems.filter(i => i !== action);
+            } else {
+                playerItems[currentPlayer] = playerItems[currentPlayer].filter(i => i !== action);
+            }
+            saveGameState();
+            updatePowerupsDisplay();
+        }
+
+        // Physical Token Activation functions (Chariot is manual)
+        function usePhysicalChariot() {
+            const currentPlayer = players[currentPlayerIndex];
+            const hasChariot = gameMode === 'cooperative'
+                ? teamItems.includes('teleport_to_player')
+                : playerItems[currentPlayer]?.includes('teleport_to_player');
+
+            if (!hasChariot) {
+                alert("Vous ne semblez pas posséder de jeton Chariot !");
+                return;
+            }
+
+            showPowerupConfirm('teleport_to_player', () => {
+                consumeItem('teleport_to_player');
+                showTeleportModal();
+            });
+        }
+
+        // Custom Modal Logic
+        function showPowerupConfirm(action, onConfirm, onCancel = null) {
+            const card = gameData.chances.find(c => c.action === action);
+            if (!card) return;
+
+            const modal = document.getElementById('powerupUsageModal');
+            const title = document.getElementById('powerupConfirmTitle');
+            const img = document.getElementById('powerupConfirmImg');
+            const text = document.getElementById('powerupConfirmText');
+            const confirmBtn = document.getElementById('powerupConfirmBtn');
+            const cancelBtn = document.getElementById('powerupCancelBtn');
+
+            title.textContent = `UTILISER LE ${card.name.toUpperCase()} ?`;
+            img.src = card.jeton || card.image;
+            text.textContent = `Voulez-vous utiliser votre jeton physique ${card.name} ?`;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('show'), 10);
+
+            confirmBtn.onclick = () => {
+                modal.classList.remove('show');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+                if (onConfirm) onConfirm();
+            };
+
+            cancelBtn.onclick = () => {
+                modal.classList.remove('show');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+                if (onCancel) onCancel();
+            };
+        }
+
+        function showTeleportModal() {
+            const modal = document.getElementById('teleportModal');
+            const list = document.getElementById('teleportPlayerList');
+            if (!modal || !list) return;
+
+            list.innerHTML = '';
+
+            players.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full bg-primary text-secondary font-poppins font-bold py-3 px-4 rounded-xl active:scale-95 transition-transform flex items-center justify-between mb-2';
+                btn.innerHTML = `<span>${p}</span> <span class="material-icons">directions_run</span>`;
+                btn.onclick = () => {
+                    modal.classList.add('hidden');
+                    showMalchanceEffect("TÉLÉPORTATION !", `Vous avez rejoint le poste de travail de ${p}.`, "carte-chariot.png");
+                };
+                list.appendChild(btn);
+            });
+
+            modal.classList.remove('hidden');
         }
 
         function closeMalchance() {
@@ -1126,18 +1519,23 @@
                     nextBtn.style.display = "block";
                 }
             } else {
-                // Jouer l'audio d'erreur pour mauvaise réponse
-                const errorAudios = ['audio/erreur/erreur-1.mp3', 'audio/erreur/erreur-2.mp3', 'audio/erreur/erreur-3.mp3'];
-                const randomErrorAudio = errorAudios[Math.floor(Math.random() * errorAudios.length)];
-                playAudio(randomErrorAudio);
-
-                lastAnswerWasWrong = true; // Marquer que la réponse était fausse
-                reaction.innerHTML = `MOUAHAHAHA ! MAUVAISE RÉPONSE ! 😈`;
-                // Afficher le bouton pour continuer vers l'écran d'échec
-                const nextBtn = document.getElementById("nextQuestionBtn");
-                nextBtn.textContent = "Continuer";
-                nextBtn.style.display = "block";
+                // Mauvaise réponse
+                triggerErrorState(reaction, options);
             }
+        }
+
+        function triggerErrorState(reaction, options) {
+            // Jouer l'audio d'erreur pour mauvaise réponse
+            const errorAudios = ['audio/erreur/erreur-1.mp3', 'audio/erreur/erreur-2.mp3', 'audio/erreur/erreur-3.mp3'];
+            const randomErrorAudio = errorAudios[Math.floor(Math.random() * errorAudios.length)];
+            playAudio(randomErrorAudio);
+
+            lastAnswerWasWrong = true; // Marquer que la réponse était fausse
+            reaction.innerHTML = `MOUAHAHAHA ! MAUVAISE RÉPONSE ! 😈`;
+            // Afficher le bouton pour continuer vers l'écran d'échec
+            const nextBtn = document.getElementById("nextQuestionBtn");
+            nextBtn.textContent = "Continuer";
+            nextBtn.style.display = "block";
         }
 
         // Nouvelle fonction pour gérer le passage à la question suivante
@@ -1224,6 +1622,8 @@
             // Réinitialiser toutes les cases en gris
             progressBoxes.forEach(box => {
                 box.style.backgroundColor = '';
+                // Supprimer toutes les classes de piliers et l'animation si présente
+                box.classList.remove('pillar-1', 'pillar-2', 'pillar-3', 'pillar-4', 'pillar-5', 'box-removing');
                 box.classList.add('bg-gray-300');
                 box.innerHTML = ''; // Vider le contenu
             });
@@ -1232,9 +1632,8 @@
             displayKeys.forEach((pillarIndex, index) => {
                 if (progressBoxes[index]) {
                     progressBoxes[index].classList.remove('bg-gray-300');
-                    progressBoxes[index].style.backgroundColor = pillarColors[pillarIndex];
-
-                    // Ajouter bouton de suppression en mode admin (FONCTIONNALITÉ SUPPRIMÉE)
+                    // Préférer l'utilisation des classes CSS pour respecter l'important
+                    progressBoxes[index].classList.add(`pillar-${pillarIndex + 1}`);
                 }
             });
 
@@ -1247,6 +1646,10 @@
         }
 
         function showFailure(pillarIndex) {
+            actuallyShowFailure(pillarIndex);
+        }
+
+        function actuallyShowFailure(pillarIndex) {
             // Jouer l'audio d'échec du pilier
             const failureAudio = `audio/echec-cle/echec-cle-${pillarIndex + 1}.mp3`;
             playAudio(failureAudio);
@@ -1260,6 +1663,8 @@
             document.getElementById('quizContent').style.display = 'none';
             document.getElementById('failureContent').style.display = 'flex';
         }
+
+
 
         function closeQuiz() {
             stopAudio(); // Arrêter l'audio
@@ -1340,6 +1745,29 @@
 
     <!-- Global Music Controller -->
     <script src="music-controller.js"></script>
-</body>
+    <!-- Power-up Usage Confirmation Modal -->
+    <div id="powerupUsageModal" class="hidden fixed inset-0 bg-black/70 z-[2000] flex items-center justify-center p-6">
+        <div class="powerup-confirm-card bg-secondary w-full max-w-sm p-8 flex flex-col gap-6 text-center">
+            <div class="py-4">
+                <img id="powerupConfirmImg" src="" alt="Jeton" class="powerup-confirm-image">
+            </div>
+            <h2 id="powerupConfirmTitle" class="font-staatliches text-4xl text-primary leading-none uppercase">
+                UTILISER ?
+            </h2>
+            <p id="powerupConfirmText" class="font-poppins text-lg font-bold text-primary opacity-80 leading-tight">
+                Voulez-vous utiliser votre jeton physique ?
+            </p>
 
-</html>
+            <div class="flex gap-4 mt-2">
+                <button id="powerupCancelBtn"
+                    class="flex-1 bg-secondary border-2 border-primary text-primary font-poppins font-bold text-xl py-4 rounded-lg hover:bg-gray-100 transition-colors">
+                    NON
+                </button>
+                <button id="powerupConfirmBtn"
+                    class="flex-1 bg-primary text-secondary font-poppins font-bold text-xl py-4 rounded-lg hover:scale-105 transition-transform shadow-lg">
+                    OUI
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
