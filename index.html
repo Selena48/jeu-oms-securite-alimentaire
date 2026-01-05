@@ -129,10 +129,70 @@
             left: 20%;
             animation-delay: 2s;
         }
+
+        /* Video Intro Overlay */
+        #videoIntroOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #videoIntroOverlay.active {
+            display: flex;
+        }
+
+        #introVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: rotate(90deg) scale(1.5);
+        }
+
+        #skipIntroBtn {
+            position: absolute;
+            bottom: 3rem;
+            left: 3rem;
+            background-color: rgba(39, 39, 39, 0.8);
+            color: #F8F7F1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 2px solid #F8F7F1;
+            transition: all 0.3s ease;
+            transform: rotate(90deg);
+        }
+
+        #skipIntroBtn:hover {
+            background-color: rgba(39, 39, 39, 1);
+            transform: scale(1.05);
+        }
+
+        #skipIntroBtn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Video Intro Overlay -->
+    <div id="videoIntroOverlay">
+        <video id="introVideo" muted>
+            <source src="video-intro.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la vidéo.
+        </video>
+        <button id="skipIntroBtn">Passer l'intro</button>
+    </div>
 
     <!-- Main Content -->
     <div class="relative z-10 max-w-md w-full text-center">
@@ -148,7 +208,7 @@
         </p>
 
         <!-- CTA Button -->
-        <button onclick="window.location.href='mode-selection.html'"
+        <button id="startGameBtn"
             class="bg-primary text-secondary font-inter font-semibold text-xl py-4 px-8 rounded-xl transition-all hover:opacity-90 hover:scale-105 active:scale-95">
             Lancer une partie !
         </button>
@@ -158,6 +218,49 @@
 
     <!-- Global Music Controller -->
     <script src="music-controller.js"></script>
+
+    <!-- Video Intro Script -->
+    <script>
+        const startGameBtn = document.getElementById('startGameBtn');
+        const videoIntroOverlay = document.getElementById('videoIntroOverlay');
+        const introVideo = document.getElementById('introVideo');
+        const skipIntroBtn = document.getElementById('skipIntroBtn');
+
+        function goToModeSelection() {
+            window.location.href = 'mode-selection.html';
+        }
+
+        // Show video when start button is clicked
+        startGameBtn.addEventListener('click', () => {
+            videoIntroOverlay.classList.add('active');
+            introVideo.muted = false; // Unmute the video
+
+            // Pause background music during video
+            if (window.MusicController) {
+                window.MusicController.pause();
+            }
+
+            introVideo.play();
+        });
+
+        // Skip intro button
+        skipIntroBtn.addEventListener('click', () => {
+            // Resume background music when skipping
+            if (window.MusicController && !window.MusicController.isMuted()) {
+                window.MusicController.play();
+            }
+            goToModeSelection();
+        });
+
+        // Auto-redirect when video ends
+        introVideo.addEventListener('ended', () => {
+            // Resume background music when video ends
+            if (window.MusicController && !window.MusicController.isMuted()) {
+                window.MusicController.play();
+            }
+            goToModeSelection();
+        });
+    </script>
 
 </body>
 
